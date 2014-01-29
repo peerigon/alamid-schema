@@ -1,0 +1,26 @@
+{
+  "name": "alamid-schema",
+  "version": "0.0.1",
+  "description": "an extendable mongoose-like like schemas for node.js and the browser",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/peerigon/alamid-schema.git"
+  },
+  "keywords": [
+    "schema",
+    "json",
+    "mongoose",
+    "model",
+    "validation"
+  ],
+  "author": "meaku <michael.jaser@peerigon.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/peerigon/alamid-schema/issues"
+  },
+  "homepage": "https://github.com/peerigon/alamid-schema",
+  "dependencies": {
+    "value": "~0.3.0"
+  }
+}
