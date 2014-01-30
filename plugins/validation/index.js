@@ -47,43 +47,51 @@ function validateField(validators, field, context, callback) {
  */
 function validationPlugin(Schema) {
 
-    Schema._init.push(function (schema) {
+    var constructor = Schema.prototype.constructor;
+
+    Schema.prototype.constructor = function (name, schema) {
         var key,
-            fieldDefinition,
-            validators = {};
+            fieldDefinition;
+
+        if(arguments.length === 1) {
+            schema = arguments[0];
+        }
+
+        //call super constructor
+        constructor.apply(this, arguments);
+
+        this.validators = {};
 
         for (key in schema) {
             if (schema.hasOwnProperty(key)) {
                 fieldDefinition = schema[key];
-                validators[key] = [];
+                this.validators[key] = [];
 
                 //predefined validators
                 if (fieldDefinition.required) {
-                    validators[key].push(defaultValidators.required());
+                    this.validators[key].push(defaultValidators.required());
                 }
                 if (value(fieldDefinition.enum).typeOf(Array)) {
-                    validators[key].push(defaultValidators.enum(fieldDefinition.enum));
+                    this.validators[key].push(defaultValidators.enum(fieldDefinition.enum));
                 }
 
                 if (value(fieldDefinition.min).typeOf(Number)) {
-                    validators[key].push(defaultValidators.min(fieldDefinition.min));
+                    this.validators[key].push(defaultValidators.min(fieldDefinition.min));
                 }
 
                 if (value(fieldDefinition.max).typeOf(Number)) {
-                    validators[key].push(defaultValidators.min(fieldDefinition.max));
+                    this.validators[key].push(defaultValidators.min(fieldDefinition.max));
                 }
 
                 //custom validators
                 if (value(fieldDefinition.validate).typeOf(Function)) {
-                    validators[key].push(fieldDefinition.validate);
+                    this.validators[key].push(fieldDefinition.validate);
                 } else if (value(fieldDefinition.validators).typeOf(Array)) {
-                    validators[key] = validators[key].concat(fieldDefinition.validators);
+                    this.validators[key] = this.validators[key].concat(fieldDefinition.validators);
                 }
             }
         }
-
-        this.validators = validators;
-    });
+    };
 
     /**
      * validate if given <data> matches schema-definition
