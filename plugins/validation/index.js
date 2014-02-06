@@ -30,7 +30,10 @@ function validateField(validators, field, context, callback) {
     validators.forEach(function (validator) {
         //sync
         if (validator.length === 1) {
-            setImmediate(validationDone, validator.call(context, field));
+            //no setImmediate on client!
+            setTimeout(function() {
+                validationDone(validator.call(context, field));
+            }, 0);
         }
         //async
         else {
