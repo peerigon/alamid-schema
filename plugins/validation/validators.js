@@ -45,5 +45,5 @@ function maxValidator(minValue) {
 
 exports.required = requiredValidator;
 exports.min = minValidator;
-exports.max = minValidator;
+exports.max = maxValidator;
 exports.enum = enumValidator;
