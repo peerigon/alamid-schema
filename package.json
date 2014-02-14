@@ -14,7 +14,7 @@
     "model",
     "validation"
   ],
-  "author": "meaku <michael.jaser@peerigon.com>",
+  "author": "peerigon <developers@peerigon.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/peerigon/alamid-schema/issues"
@@ -22,5 +22,9 @@
   "homepage": "https://github.com/peerigon/alamid-schema",
   "dependencies": {
     "value": "~0.3.0"
+  },
+  "devDependencies": {
+      "chai": "1.x",
+      "mocha": "1.x"
   }
 }
