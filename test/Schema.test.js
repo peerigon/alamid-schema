@@ -20,15 +20,23 @@ describe("Schema", function () {
         describe(".fields(key1, key2, key3)", function () {
             var subset;
 
-            beforeEach(function () {
-                subset = schema.fields("name", "age");
-            });
-
             it("should return an independent instance", function () {
+                subset = schema.fields("name", "age");
                 expect(subset).not.to.equal(schema);
             });
 
             it("should change the .keys-property to the given keys", function () {
+                subset = schema.fields("name", "age");
+                expect(subset.keys).to.eql(["name", "age"]);
+            });
+
+        });
+
+        describe(".fields(keys)", function () {
+            var subset;
+
+            it("should just work like .fields(key1, key2, kex3)", function () {
+                subset = schema.fields(["name", "age"]);
                 expect(subset.keys).to.eql(["name", "age"]);
             });
 
