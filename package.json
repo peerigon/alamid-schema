@@ -1,6 +1,6 @@
 {
   "name": "alamid-schema",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "an extendable mongoose-like like schemas for node.js and the browser",
   "main": "lib/Schema.js",
   "scripts": {
