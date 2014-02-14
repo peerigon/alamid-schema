@@ -89,8 +89,8 @@ function validationPlugin(Schema) {
                 //custom validators
                 if (value(fieldDefinition.validate).typeOf(Function)) {
                     this.validators[key].push(fieldDefinition.validate);
-                } else if (value(fieldDefinition.validators).typeOf(Array)) {
-                    this.validators[key] = this.validators[key].concat(fieldDefinition.validators);
+                } else if (value(fieldDefinition.validate).typeOf(Array)) {
+                    this.validators[key] = this.validators[key].concat(fieldDefinition.validate);
                 }
             }
         }
