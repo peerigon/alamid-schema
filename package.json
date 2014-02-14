@@ -3,6 +3,9 @@
   "version": "0.0.4",
   "description": "an extendable mongoose-like like schemas for node.js and the browser",
   "main": "lib/Schema.js",
+  "scripts": {
+      "test": "node node_modules/mocha/bin/mocha -R spec"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/peerigon/alamid-schema.git"
