@@ -83,7 +83,7 @@ function validationPlugin(Schema) {
                 }
 
                 if (value(fieldDefinition.max).typeOf(Number)) {
-                    this.validators[key].push(defaultValidators.min(fieldDefinition.max));
+                    this.validators[key].push(defaultValidators.max(fieldDefinition.max));
                 }
 
                 //custom validators
