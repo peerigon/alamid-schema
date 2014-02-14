@@ -29,16 +29,16 @@ function runValidation(validators, field, context, callback) {
     }
 
     validators.forEach(function (validator) {
+        //async
+        if (validator.length === 2) {
+            validator.call(context, field, validationDone);
+        }
         //sync
-        if (validator.length === 1) {
+        else {
             //no setImmediate on client!
-            setTimeout(function() {
+            setTimeout(function () {
                 validationDone(validator.call(context, field));
             }, 0);
-        }
-        //async
-        else {
-            validator.call(context, field, validationDone);
         }
     });
 }
@@ -56,7 +56,7 @@ function validationPlugin(Schema) {
         var key,
             fieldDefinition;
 
-        if(arguments.length === 1) {
+        if (arguments.length === 1) {
             schema = arguments[0];
         }
 
