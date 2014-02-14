@@ -4,7 +4,7 @@
   "description": "an extendable mongoose-like like schemas for node.js and the browser",
   "main": "lib/Schema.js",
   "scripts": {
-      "test": "node node_modules/mocha/bin/mocha -R spec"
+    "test": "node node_modules/mocha/bin/mocha -R spec"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,8 @@
     "value": "~0.3.0"
   },
   "devDependencies": {
-      "chai": "1.x",
-      "mocha": "1.x"
+    "chai": "1.x",
+    "mocha": "1.x",
+    "chai-spies": "~0.5.1"
   }
 }
