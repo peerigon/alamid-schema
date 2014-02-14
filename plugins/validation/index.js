@@ -4,14 +4,15 @@ var value = require("value"),
     defaultValidators = require("./validators.js");
 
 /**
- * validate a single <field>
+ * Runs the given validators on a single field
  *
+ * @private
  * @param {Array} validators
  * @param {*} field
  * @param {Object} context
  * @param {Function} callback
  */
-function validateField(validators, field, context, callback) {
+function runValidation(validators, field, context, callback) {
     var result = [],
         pending = validators.length;
 
@@ -43,8 +44,7 @@ function validateField(validators, field, context, callback) {
 }
 
 /**
- * Validation Plugin
- * adds an .validate method to the Schema
+ * Adds validation methods to the schema
  *
  * @param {Function} Schema
  */
@@ -97,11 +97,11 @@ function validationPlugin(Schema) {
     };
 
     /**
-     * validate if given <data> matches schema-definition
-     * @param {Object} data
+     * Validate if given model matches schema-definition
+     * @param {Object} model
      * @param {Function} callback
      */
-    Schema.prototype.validate = function validate(data, callback) {
+    Schema.prototype.validate = function (model, callback) {
         var self = this,
             pending = 0,
             result = {
@@ -115,7 +115,7 @@ function validationPlugin(Schema) {
             }
 
             pending++;
-            validateField(self.validators[key], data[key], data, function (res) {
+            runValidation(self.validators[key], model[key], model, function (res) {
                 pending--;
 
                 if (res.length > 0) {
