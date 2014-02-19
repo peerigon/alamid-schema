@@ -105,9 +105,18 @@ function validationPlugin(Schema) {
         var self = this,
             pending = 0,
             result = {
+                model: model,
                 result: true,
                 failedFields: {}
             };
+
+        if (this.keys.length === 0) {
+            setTimeout(function () {
+                callback(result);
+            }, 0);
+
+            return;
+        }
 
         this.keys.forEach(function (key) {
             if (self.validators[key].length === 0) {

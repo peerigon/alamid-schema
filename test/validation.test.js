@@ -165,9 +165,20 @@ describe("plugins/validation", function () {
         });
 
         describe(".validate(model, callback)", function () {
+            var schema;
+
+            it("should reference the given model to the validation result", function (done) {
+                var model = {};
+
+                schema = new Schema({});
+                schema.validate(model, function (validation) {
+                    expect(validation.model).to.equal(model);
+                    done();
+                });
+            });
 
             it("should work with sync validators", function (done) {
-                var schema = new Schema({
+                schema = new Schema({
                     age: {
                         type: Number,
                         validate: function (age) {
@@ -184,7 +195,7 @@ describe("plugins/validation", function () {
             });
 
             it("should work with async validators", function (done) {
-                var schema = new Schema({
+                schema = new Schema({
                     age: {
                         type: Number,
                         validate: function (age, callback) {
@@ -216,13 +227,14 @@ describe("plugins/validation", function () {
 
                 it("should pass if async & sync validators pass", function (done) {
                     var asyncSpy = chai.spy(validateAgeAsync),
-                        syncSpy = chai.spy(validateAgeSync),
-                        schema = new Schema({
-                            age: {
-                                type: Number,
-                                validate: [asyncSpy, syncSpy]
-                            }
-                        });
+                        syncSpy = chai.spy(validateAgeSync);
+
+                    schema = new Schema({
+                        age: {
+                            type: Number,
+                            validate: [asyncSpy, syncSpy]
+                        }
+                    });
 
                     schema.validate({ age: 18 }, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
@@ -235,13 +247,14 @@ describe("plugins/validation", function () {
 
                 it("should fail if a async and sync validator fail", function (done) {
                     var asyncSpy = chai.spy(validateAgeAsync),
-                        syncSpy = chai.spy(validateAgeSync),
-                        schema = new Schema({
-                            age: {
-                                type: Number,
-                                validate: [asyncSpy, syncSpy]
-                            }
-                        });
+                        syncSpy = chai.spy(validateAgeSync);
+
+                    schema = new Schema({
+                        age: {
+                            type: Number,
+                            validate: [asyncSpy, syncSpy]
+                        }
+                    });
 
                     schema.validate({ age: 6 }, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
@@ -258,13 +271,14 @@ describe("plugins/validation", function () {
                                 callback("fail-async");
                             }, 0);
                         }),
-                        syncSpy = chai.spy(validateAgeSync),
-                        schema = new Schema({
-                            age: {
-                                type: Number,
-                                validate: [asyncSpy, syncSpy]
-                            }
-                        });
+                        syncSpy = chai.spy(validateAgeSync);
+
+                    schema = new Schema({
+                        age: {
+                            type: Number,
+                            validate: [asyncSpy, syncSpy]
+                        }
+                    });
 
                     schema.validate({ age: 6 }, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
@@ -281,13 +295,14 @@ describe("plugins/validation", function () {
                         }),
                         syncSpy = chai.spy(function(age) {
                             return "fail-sync";
-                        }),
-                        schema = new Schema({
-                            age: {
-                                type: Number,
-                                validate: [asyncSpy, syncSpy]
-                            }
                         });
+
+                    schema = new Schema({
+                        age: {
+                            type: Number,
+                            validate: [asyncSpy, syncSpy]
+                        }
+                    });
 
                     schema.validate({ age: 8 }, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
