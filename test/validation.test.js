@@ -137,6 +137,31 @@ describe("plugins/validation", function () {
                 });
 
             });
+
+            describe("extended schemas", function () {
+
+                it("should merge all specified validators", function () {
+                    var schema = new Schema({
+                            age: {
+                                required: true,
+                                max: 99,
+                                validate: oldEnough
+                            }
+                        }),
+                        extended = schema.extend({
+                            age: {
+                                required: false,
+                                validate: notTooOld
+                            }
+                        }),
+                        ageValidators = extended.validators.age.toString();
+
+                    expect(ageValidators).to.contain(validators.max(), oldEnough, notTooOld);
+                    expect(ageValidators).to.not.contain(validators.required());
+                });
+
+            });
+
         });
 
         describe(".validate(model, callback)", function () {
@@ -273,6 +298,7 @@ describe("plugins/validation", function () {
                     });
                 });
             });
+
         });
     });
 
