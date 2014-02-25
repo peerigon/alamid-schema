@@ -167,6 +167,17 @@ describe("plugins/validation", function () {
         describe(".validate(model, callback)", function () {
             var schema;
 
+            it("should throw an error if model is not an object", function() {
+                var schema = new Schema({});
+
+                expect(function() { schema.validate(null, function() {}); }).to.throw(TypeError);
+                expect(function() { schema.validate(undefined, function() {}); }).to.throw(TypeError);
+                expect(function() { schema.validate("", function() {}); }).to.throw(TypeError);
+                expect(function() { schema.validate(12, function() {}); }).to.throw(TypeError);
+
+                expect(function() { schema.validate({}, function() {}); }).to.not.throw(TypeError);
+            });
+
             it("should reference the given model to the validation result", function (done) {
                 var model = {};
 
@@ -245,7 +256,7 @@ describe("plugins/validation", function () {
                     });
                 });
 
-                it("should fail if a async and sync validator fail", function (done) {
+                it("should fail if an async and sync validator fail", function (done) {
                     var asyncSpy = chai.spy(validateAgeAsync),
                         syncSpy = chai.spy(validateAgeSync);
 

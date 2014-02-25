@@ -110,6 +110,10 @@ function validationPlugin(Schema) {
                 failedFields: {}
             };
 
+        if(value(model).notTypeOf(Object)) {
+            throw new TypeError("Model must be an object");
+        }
+
         if (this.keys.length === 0) {
             setTimeout(function () {
                 callback(result);
