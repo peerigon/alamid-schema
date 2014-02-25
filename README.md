@@ -27,8 +27,7 @@ var Panda = new Schema("Panda", {
 
 __Example__
 
-```
-
+```javascript
 var panda = {
     name: "peeri",
     age: 3,
