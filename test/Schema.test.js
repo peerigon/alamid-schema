@@ -77,27 +77,106 @@ describe("Schema", function () {
 
         });
 
-        describe(".fields(key1, key2, key3)", function () {
+        describe(".only(key1, key2, key3)", function () {
             var subset;
 
             it("should return an independent instance", function () {
-                subset = schema.fields("name", "age");
+                subset = schema.only("name", "age");
                 expect(subset).not.to.equal(schema);
             });
 
+            it("should inherit all properties prototypically except 'keys'", function () {
+                var ownProperties = [],
+                    key;
+
+                subset = schema.only("name", "age");
+                for (key in subset) {
+                    if (subset.hasOwnProperty(key)) {
+                        ownProperties.push(key);
+                    }
+                }
+                expect(ownProperties).to.eql(["keys"]);
+                expect(schema.types).to.be.an("object");
+                expect(schema.name).to.be.an("string");
+            });
+
             it("should change the .keys-property to the given keys", function () {
-                subset = schema.fields("name", "age");
+                subset = schema.only("name", "age");
                 expect(subset.keys).to.eql(["name", "age"]);
+            });
+
+            it("should throw an error if no keys are given", function () {
+                expect(function () {
+                    schema.only();
+                }).to.throw("Cannot create a subset of the schema with no keys");
             });
 
         });
 
-        describe(".fields(keys)", function () {
+        describe(".only(keys)", function () {
             var subset;
 
-            it("should just work like .fields(key1, key2, kex3)", function () {
-                subset = schema.fields(["name", "age"]);
+            it("should just work like .only(key1, key2, kex3)", function () {
+                subset = schema.only(["name", "age"]);
                 expect(subset.keys).to.eql(["name", "age"]);
+            });
+
+            it("should throw an error if no keys are given", function () {
+                expect(function () {
+                    schema.only([]);
+                }).to.throw("Cannot create a subset of the schema with no keys");
+            });
+
+        });
+
+        describe(".except(key1, key2, key3)", function () {
+            var subset;
+
+            it("should return an independent instance", function () {
+                subset = schema.except("name", "age");
+                expect(subset).not.to.equal(schema);
+            });
+
+            it("should inherit all properties prototypically except 'keys'", function () {
+                var ownProperties = [],
+                    key;
+
+                subset = schema.except("name", "age");
+                for (key in subset) {
+                    if (subset.hasOwnProperty(key)) {
+                        ownProperties.push(key);
+                    }
+                }
+                expect(ownProperties).to.eql(["keys"]);
+                expect(schema.types).to.be.an("object");
+                expect(schema.name).to.be.an("string");
+            });
+
+            it("should exclude the given keys from the keys-property", function () {
+                subset = schema.except("friends", "age");
+                expect(subset.keys).to.eql(["name"]);
+            });
+
+            it("should throw an error if no keys are given", function () {
+                expect(function () {
+                    schema.except.apply(schema, schema.keys);
+                }).to.throw("Cannot create a subset of the schema with no keys");
+            });
+
+        });
+
+        describe(".except(keys)", function () {
+            var subset;
+
+            it("should just work like .only(key1, key2, kex3)", function () {
+                subset = schema.only(["name", "age"]);
+                expect(subset.keys).to.eql(["name", "age"]);
+            });
+
+            it("should throw an error if no keys are given", function () {
+                expect(function () {
+                    schema.except(schema.keys);
+                }).to.throw("Cannot create a subset of the schema with no keys");
             });
 
         });
