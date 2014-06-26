@@ -114,6 +114,10 @@ function validationPlugin(Schema) {
             throw new TypeError("Model must be an object");
         }
 
+        if(!this.validators) {
+            throw new Error("Validators not defined: Have you registered the validate plugin before any schema definitions?");
+        }
+
         if (this.keys.length === 0) {
             setTimeout(function () {
                 callback(result);
