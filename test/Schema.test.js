@@ -25,7 +25,34 @@ describe("Schema", function () {
                 expect(schema.keys).to.eql(["name", "age", "friends"]);
             });
 
-            it("should extract the types from the definition", function () {
+            it("should extract the types from the definition if using Constructors", function () {
+
+                schema = new Schema({
+                    name: String,
+                    age: Number,
+                    friends: {
+                        type: Array
+                    }
+                });
+
+                expect(schema.types).to.eql({
+                    name: "String",
+                    age: "Number",
+                    friends: "Array"
+                });
+            });
+
+
+            it("should extract the types from the definition if using values", function () {
+
+                schema = new Schema({
+                    name: "panda",
+                    age: 12,
+                    friends: {
+                        type: []
+                    }
+                });
+
                 expect(schema.types).to.eql({
                     name: "String",
                     age: "Number",
