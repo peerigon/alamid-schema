@@ -29,7 +29,7 @@ var Panda = new Schema("Panda", {
 
 ### Schema Definition
 
-You can defined your Schema with concrete values...
+You can define your schema with concrete values...
 
 ```javascript
 var PandaSchema = new Schema({
@@ -41,7 +41,7 @@ var PandaSchema = new Schema({
 });
 ```
 
-..or with abstract types... 
+...or with abstract types... 
 
 ```javascript
 var PandaSchema = new Schema({
@@ -73,11 +73,12 @@ var SuperPanda = PandaSchema.extend("SuperPanda", {
         type: Boolean
     }
 });
+``` 
 
+We have a superpanda now... which can fly and has xray eyes!
+That's basically the same as...
 
-/*
-//we have a superpanda now... which can fly and has xray eyes!
-//same as...
+```javascript
 var SuperPanda = new Schema({
     name: String,
     age: Number,
@@ -89,7 +90,6 @@ var SuperPanda = new Schema({
         type: Boolean
     }
 });
-*/
 ```
 
 
@@ -108,20 +108,21 @@ var Panda = Animal.extend("Panda", {
     age: Number
     color: String
 });
+```
 
-/*
-//equals 
+equals...
+
+```javascript
 var Panda = new Schema("Panda", {
     name: String,
     age: Number,   //overwritten
     color: String  //added 
 });
-*/
 ```
 
 ### Schema Subsets
 
-If you need a subset of a Schema containing only certain properties, you can use `Schema.fields()` . 
+If you need a subset of a schema containing only certain properties, you can use `Schema.fields()` . 
 
 ```javascript
 var Panda = new Schema("Panda", {
@@ -131,14 +132,15 @@ var Panda = new Schema("Panda", {
 });
 
 var SubsetPanda = Panda.fields("name", "age"); 
+```
 
-/*
-//equals
+equals...
+
+```javascript
 var Panda = new Schema("Panda", {
     name: String,
     age: Number
 });
-*/
 ```
 
 ### Plugin: Validation
@@ -146,8 +148,6 @@ var Panda = new Schema("Panda", {
 The validation plugins adds - *suprise!* - validation support.  
 
 ```javascript
-"use strict";
-
 var Schema = require("alamid-schema");
 Schema.use(require("alamid-schema/plugins/validation"));
 
@@ -183,23 +183,25 @@ PandaSchema.validate(panda, function(validation) {
 
     console.log("happy panda");
 });
+```
 
-/*
-//outputs...
+outputs... 
+
+```javascript
 {
     result: true,
     failedFields: {
         age: [ 'min' ] 
     }
 }
-*/
 ```
+
 
 _Included validators:_  
 
 - required
-- (Number) min
-- (Number) max
+- min (Number)
+- max (Number)
 - enum 
 
 _Writing custom validators:_
@@ -252,14 +254,19 @@ PandaSchema.validate(panda, function(validation) {
         console.log(validation.failedFields);
         return;
     }
-
-    /**
-     * { name: [ 'name-already-taken' ], age: [ 'too-young' ] }
-     */
-
     console.log("happy panda");
 });
 ``` 
+
+outputs... 
+
+
+```javascript
+{ 
+    name: [ "name-already-taken" ], 
+    age:  [ "too-young" ]
+}
+```
 
 _Note:_ validators will be called with `this` bound to `model`. 
 
