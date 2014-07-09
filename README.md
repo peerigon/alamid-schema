@@ -8,6 +8,20 @@ alamid-schema
 
 If you like [mongoose](http://mongoosejs.com/) schemas and you want to use them standalone, **alamid-schema** is the right module for you.
 
+__alamid-schema__ helps you with 
+
+- validation of data
+- sanitization of data
+- defining readable/writeable fields (coming soon)
+
+Use it on the server to...
+ - normalize and validate incoming requests 
+ - strip private fields from the response
+   
+Use it on the client to... 
+- validate forms 
+- define view models
+
 ```javascript
 var Schema = require("alamid-schema");
 
