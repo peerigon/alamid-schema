@@ -11,8 +11,10 @@ If you like [mongoose](http://mongoosejs.com/) schemas and you want to use them 
 __alamid-schema__ helps you with 
 
 - validation of data
-- sanitization of data
-- defining readable/writeable fields (coming soon)
+- using mongoose-like schemas without using mongoose
+- sharing data-definition between client & server
+- normalizing data (coming soon)
+- striping readable/writeable fields (coming soon)
 
 Use it on the server to...
  - normalize and validate incoming requests 
@@ -203,7 +205,7 @@ outputs...
 
 ```javascript
 {
-    result: true,
+    result: false,
     failedFields: {
         age: [ 'min' ] 
     }
