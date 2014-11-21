@@ -11,7 +11,11 @@ describe("Schema", function () {
 
         beforeEach(function () {
             schema = new Schema({
-                name: String,
+                name: {
+                    type: "String",
+                    readable: false,
+                    writable: false
+                },
                 age: 3,
                 friends: {
                     type: Array
@@ -62,14 +66,20 @@ describe("Schema", function () {
 
             it("should normalize the definition", function () {
                 expect(schema.definition).to.eql({
-                    name: {
-                        type: "String"
+                    "age": {
+                        "readable": true,
+                        "type": "Number",
+                        "writable": true
                     },
-                    age: {
-                        type: "Number"
+                    "friends": {
+                        "readable": true,
+                        "type": "Array",
+                        "writable": true
                     },
-                    friends: {
-                        type: "Array"
+                    "name": {
+                        "readable": false,
+                        "type": "String",
+                        "writable": false
                     }
                 });
             });
@@ -85,7 +95,11 @@ describe("Schema", function () {
 
             beforeEach(function () {
                 namedSchema = new Schema("User", {
-                    name: String,
+                    name: {
+                        type: "String",
+                        readable: false,
+                        writable: false
+                    },
                     age: 3,
                     friends: {
                         type: Array
@@ -268,6 +282,43 @@ describe("Schema", function () {
                 expect(extended.keys).to.contain("password", "token");
                 expect(extended.types.password).to.equal("String");
                 expect(extended.types.token).to.equal("String");
+            });
+
+        });
+
+        describe(".getWritableFields()", function () {
+
+            it("should return writable fields", function () {
+                var writableFields = schema.getWritableFields();
+                expect(writableFields).to.eql(["age", "friends"]);
+            });
+
+        });
+
+        describe(".getWritableSchema()", function () {
+
+            it("should return a schema with only writeable Fields", function () {
+                var writableSchema = schema.getWritableSchema();
+                expect(writableSchema.keys.length).to.eql(2);
+            });
+
+        });
+
+        describe(".getReadableFields()", function () {
+
+            it("should return readable fields", function () {
+                var readableFields = schema.getReadableFields();
+                expect(readableFields).to.eql(["age", "friends"]);
+            });
+
+        });
+
+
+        describe(".getReadableSchema()", function () {
+
+            it("should return a schema with only readable Fields", function () {
+                var readableSchema = schema.getReadableSchema();
+                expect(readableSchema.keys.length).to.eql(2);
             });
 
         });

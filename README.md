@@ -31,7 +31,9 @@ var Panda = new Schema("Panda", {
     name: String,
     age: {
         type: Number,
-        required: true
+        required: true,
+        writable: false,
+        readable: true
     },
     mood: {
         type: String,
@@ -302,6 +304,30 @@ Returns a subset with the given keys of the current schema. You may pass an arra
 
 Creates a new schema that inherits from the current schema. Field definitions are merged where appropriate. 
 If a definition conflicts with the parent definition, the child's definition supersedes.
+
+### Readable & Writable fields
+
+You can define readable and writable fields in the schema. As default every field is read- and writable.
+
+```
+var PandaSchema = new Schema({
+    id: {
+        type: Number,
+        required: true,
+        readable: true,
+        writable: false
+    },
+    lastModified: {
+        readable: true,
+        writable: false
+    }
+};
+```
+
+#### .getWritableFields()
+#### .getWritableSchema()
+#### .getReadableFields()
+#### .getReadableSchema()
 
 ### Plugin: Validation
 
