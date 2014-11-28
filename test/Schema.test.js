@@ -10,9 +10,10 @@ describe("Schema", function () {
 
     describe(".prototype", function () {
         var schema;
+        var definition;
 
         beforeEach(function () {
-            schema = new Schema({
+            definition = {
                 name: {
                     type: "String",
                     readable: false,
@@ -20,9 +21,11 @@ describe("Schema", function () {
                 },
                 age: 3,
                 friends: {
+                    writable: false,
                     type: Array
                 }
-            });
+            };
+            schema = new Schema(definition);
         });
 
         describe(".constructor(definition)", function () {
@@ -68,20 +71,20 @@ describe("Schema", function () {
 
             it("should normalize the definition", function () {
                 expect(schema.definition).to.eql({
-                    "age": {
-                        "readable": true,
-                        "type": "Number",
-                        "writable": true
+                    age: {
+                        readable: true,
+                        type: "Number",
+                        writable: true
                     },
-                    "friends": {
-                        "readable": true,
-                        "type": "Array",
-                        "writable": true
+                    friends: {
+                        readable: true,
+                        type: "Array",
+                        writable: false
                     },
-                    "name": {
-                        "readable": false,
-                        "type": "String",
-                        "writable": false
+                    name: {
+                        readable: false,
+                        type: "String",
+                        writable: false
                     }
                 });
             });
@@ -96,17 +99,7 @@ describe("Schema", function () {
             var namedSchema;
 
             beforeEach(function () {
-                namedSchema = new Schema("User", {
-                    name: {
-                        type: "String",
-                        readable: false,
-                        writable: false
-                    },
-                    age: 3,
-                    friends: {
-                        type: Array
-                    }
-                });
+                namedSchema = new Schema("User", definition);
             });
 
             it("should apply the given name", function () {
@@ -292,16 +285,19 @@ describe("Schema", function () {
 
             it("should return writable fields", function () {
                 var writableFields = schema.writableFields();
-                expect(writableFields).to.eql(["age", "friends"]);
+
+                expect(writableFields).to.eql(["age"]);
             });
 
         });
 
         describe(".writable()", function () {
 
-            it("should return a schema with only writeable Fields", function () {
+            it("should return a schema with only writable fields", function () {
                 var writableSchema = schema.writable();
-                expect(writableSchema.keys.length).to.eql(2);
+
+                expect(writableSchema).to.be.an.instanceOf(Schema);
+                expect(writableSchema.keys).to.eql(["age"]);
             });
 
         });
@@ -310,6 +306,7 @@ describe("Schema", function () {
 
             it("should return readable fields", function () {
                 var readableFields = schema.readableFields();
+
                 expect(readableFields).to.eql(["age", "friends"]);
             });
 
@@ -318,9 +315,11 @@ describe("Schema", function () {
 
         describe(".readable()", function () {
 
-            it("should return a schema with only readable Fields", function () {
+            it("should return a schema with only readable fields", function () {
                 var readableSchema = schema.readable();
-                expect(readableSchema.keys.length).to.eql(2);
+
+                expect(readableSchema).to.be.an.instanceOf(Schema);
+                expect(readableSchema.keys).to.eql(["age", "friends"]);
             });
 
         });
