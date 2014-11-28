@@ -286,38 +286,38 @@ describe("Schema", function () {
 
         });
 
-        describe(".getWritableFields()", function () {
+        describe(".writableFields()", function () {
 
             it("should return writable fields", function () {
-                var writableFields = schema.getWritableFields();
+                var writableFields = schema.writableFields();
                 expect(writableFields).to.eql(["age", "friends"]);
             });
 
         });
 
-        describe(".getWritableSchema()", function () {
+        describe(".writable()", function () {
 
             it("should return a schema with only writeable Fields", function () {
-                var writableSchema = schema.getWritableSchema();
+                var writableSchema = schema.writable();
                 expect(writableSchema.keys.length).to.eql(2);
             });
 
         });
 
-        describe(".getReadableFields()", function () {
+        describe(".readableFields()", function () {
 
             it("should return readable fields", function () {
-                var readableFields = schema.getReadableFields();
+                var readableFields = schema.readableFields();
                 expect(readableFields).to.eql(["age", "friends"]);
             });
 
         });
 
 
-        describe(".getReadableSchema()", function () {
+        describe(".readable()", function () {
 
             it("should return a schema with only readable Fields", function () {
-                var readableSchema = schema.getReadableSchema();
+                var readableSchema = schema.readable();
                 expect(readableSchema.keys.length).to.eql(2);
             });
 
