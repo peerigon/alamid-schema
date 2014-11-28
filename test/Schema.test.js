@@ -1,8 +1,10 @@
 "use strict";
 
-var chai = require("chai"),
-    expect = chai.expect,
-    Schema = require("../" + require("../package.json").main);
+var chai = require("chai");
+var expect = chai.expect;
+var Schema = require("../lib/Schema.js");
+
+chai.config.includeStack = true;
 
 describe("Schema", function () {
 

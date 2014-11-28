@@ -1,8 +1,10 @@
 "use strict";
 
-var chai = require("chai"),
-    expect = chai.expect,
-    merge = require("../lib/merge.js");
+var chai = require("chai");
+var expect = chai.expect;
+var merge = require("../lib/merge.js");
+
+chai.config.includeStack = true;
 
 describe("merge(source, target)", function () {
     var a,

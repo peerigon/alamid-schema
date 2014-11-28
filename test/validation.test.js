@@ -427,7 +427,7 @@ describe("plugins/validation", function () {
                     schema.validate({age: 8}, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
-                        expect(validation.result).to.eql(false);
+                        expect(validation.result).to.equal(false);
                         expect(validation.failedFields.age).to.contain("fail-sync");
                         done();
                     });
