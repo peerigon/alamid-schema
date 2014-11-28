@@ -11,7 +11,7 @@
     "url": "git://github.com/peerigon/alamid-schema.git"
   },
   "engines" : {
-    "node" : ">=0.11" 
+    "node" : ">=0.11"
   },
   "keywords": [
     "schema",
@@ -30,7 +30,8 @@
   },
   "homepage": "https://github.com/peerigon/alamid-schema",
   "dependencies": {
-    "value": "0.3.x"
+    "value": "^0.3.0",
+    "alamid-plugin": "^0.1.0"
   },
   "devDependencies": {
     "chai": "^3.0.0",
