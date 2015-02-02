@@ -16,6 +16,13 @@ function runValidation(validators, field, context, callback) {
     var result = [],
         pending = validators.length;
 
+    // Return immediately if the field has no validator defined
+    if (pending === 0) {
+        setTimeout(function () {
+            return callback(result);
+        }, 0);
+    }
+
     function validationDone(res) {
         pending--;
 
@@ -127,10 +134,6 @@ function validationPlugin(Schema) {
         }
 
         this.keys.forEach(function (key) {
-            if (self.validators[key].length === 0) {
-                return;
-            }
-
             pending++;
             runValidation(self.validators[key], model[key], model, function (res) {
                 pending--;
