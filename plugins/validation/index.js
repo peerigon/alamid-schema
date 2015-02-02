@@ -18,7 +18,9 @@ function runValidation(validators, field, context, callback) {
 
     // Return immediately if the field has no validator defined
     if (pending === 0) {
-        return callback(result);
+        setTimeout(function () {
+            return callback(result);
+        }, 0);
     }
 
     function validationDone(res) {
