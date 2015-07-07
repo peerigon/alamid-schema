@@ -5,6 +5,7 @@ alamid-schema
 [![npm status](https://nodei.co/npm/alamid-schema.svg?downloads=true&stars=true)](https://npmjs.org/package/alamid-schema)<br>
 [![build status](https://travis-ci.org/peerigon/alamid-schema.svg)](http://travis-ci.org/peerigon/alamid-schema)
 [![dependencies](https://david-dm.org/peerigon/alamid-schema.svg)](http://david-dm.org/peerigon/alamid-schema)
+[![devDependency Status](https://david-dm.org/peerigon/alamid-schema/dev-status.svg)](https://david-dm.org/peerigon/alamid-schema#info=devDependencies)
 
 If you like [mongoose](http://mongoosejs.com/) schemas and you want to use them standalone, **alamid-schema** is the right module for you.
 
