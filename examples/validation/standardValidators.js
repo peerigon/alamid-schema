@@ -1,6 +1,5 @@
 "use strict";
 
-
 var Schema = require("../../lib/Schema.js");
 Schema.use(require("../../plugins/validation/index.js"));
 
