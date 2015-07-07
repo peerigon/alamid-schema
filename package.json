@@ -30,8 +30,8 @@
     "value": "0.3.x"
   },
   "devDependencies": {
-    "chai": "1.x",
-    "mocha": "1.x",
-    "chai-spies": "0.5.x"
+    "chai": "^3.0.0",
+    "chai-spies": "^0.6.0",
+    "mocha": "^2.2.5"
   }
 }
