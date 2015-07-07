@@ -27,7 +27,8 @@
   },
   "homepage": "https://github.com/peerigon/alamid-schema",
   "dependencies": {
-    "value": "0.3.x"
+    "value": "0.3.x",
+    "when": "^3.7.3"
   },
   "devDependencies": {
     "chai": "^3.0.0",
