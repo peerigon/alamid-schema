@@ -139,29 +139,6 @@ var Panda = new Schema("Panda", {
 });
 ```
 
-### Schema Subsets
-
-If you need a subset of a schema containing only certain properties, you can use `Schema.fields()` . 
-
-```javascript
-var Panda = new Schema("Panda", {
-    name: String,
-    age: Number,
-    color: String 
-});
-
-var SubsetPanda = Panda.fields("name", "age"); 
-```
-
-equals...
-
-```javascript
-var Panda = new Schema("Panda", {
-    name: String,
-    age: Number
-});
-```
-
 ### Plugin: Validation
 
 The validation plugins adds - *suprise!* - validation support.  
@@ -300,7 +277,7 @@ PandaSchema.validate(panda)
   });
 ```
 
-As Promises are not present in node versions smaller than 0.12 we use a [ES6 Promise Shim](https://github.com/cujojs/when/tree/master/es6-shim) provided by [when.js](https://github.com/cujojs/when).
+We included an [ES2015 shim](https://github.com/cujojs/when/tree/master/es6-shim) in case you are using Node.js < 0.12 or a browser without native Promise support.
 
 ## API 
 
