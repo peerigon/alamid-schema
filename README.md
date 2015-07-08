@@ -289,6 +289,19 @@ outputs...
 
 _Note:_ validators will be called with `this` bound to `model`. 
 
+### Promises
+
+Instead of using a callback it is possible to return a Promise instead.
+
+```javascript
+PandaSchema.validate(panda)
+  .then(function (res) {
+	// ...
+  });
+```
+
+As Promises are not present in node versions smaller than 0.12 we use a [ES6 Promise Shim](https://github.com/cujojs/when/tree/master/es6-shim) provided by [when.js](https://github.com/cujojs/when).
+
 ## API 
 
 ### Core 

@@ -1,5 +1,9 @@
 "use strict";
 
+if (typeof Promise === "undefined") {
+    require("when/es6-shim/Promise");
+}
+
 var value = require("value"),
     defaultValidators = require("./validators.js");
 
@@ -107,6 +111,7 @@ function validationPlugin(Schema) {
      * Validate if given model matches schema-definition
      * @param {Object} model
      * @param {Function} callback
+     * @returns {Promise}
      */
     Schema.prototype.validate = function (model, callback) {
         var self = this,
@@ -125,29 +130,45 @@ function validationPlugin(Schema) {
             throw new Error("Validators not defined: Have you registered the validate plugin before any schema definitions?");
         }
 
-        if (this.keys.length === 0) {
-            setTimeout(function () {
-                callback(result);
-            }, 0);
+        var promise = new Promise(function (resolve, reject) {
+            if (self.keys.length === 0) {
+                setTimeout(function () {
+                    resolve(result);
+                }, 0);
+            }
 
-            return;
-        }
+            self.keys.forEach(function (key) {
+                pending++;
+                runValidation(self.validators[key], model[key], model, function (res) {
+                    pending--;
 
-        this.keys.forEach(function (key) {
-            pending++;
-            runValidation(self.validators[key], model[key], model, function (res) {
-                pending--;
+                    if (res.length > 0) {
+                        result.result = false;
+                        result.failedFields[key] = res;
+                    }
 
-                if (res.length > 0) {
-                    result.result = false;
-                    result.failedFields[key] = res;
-                }
+                    if (pending === 0) {
+                        if (result === false) {
+                            reject(result);
+                        }
 
-                if (pending === 0) {
-                    callback(result);
-                }
+                        resolve(result);
+                    }
+                });
             });
         });
+
+        if (typeof callback === "function") {
+            promise
+                .then(function (res) {
+                    callback(res);
+                })
+                .catch(function (err) {
+                    callback(err);
+                });
+        } else {
+            return promise;
+        }
     };
 }
 

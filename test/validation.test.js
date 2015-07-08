@@ -2,13 +2,15 @@
 
 var chai = require("chai"),
     expect = chai.expect,
-    spies = require('chai-spies');
+    spies = require('chai-spies'),
+    chaiAsPromised = require("chai-as-promised");
 
 var Schema = require("../lib/Schema.js"),
     validators = require("../plugins/validation/validators.js"),
     validationPlugin = require("../plugins/validation/index.js");
 
 chai.use(spies);
+chai.use(chaiAsPromised);
 chai.Assertion.includeStack = true;
 
 function oldEnough(age) {
@@ -222,6 +224,17 @@ describe("plugins/validation", function () {
                     expect(validation.failedFields).to.eql({});
                     done();
                 });
+            });
+
+            it("should return a promise if no callback is given", function () {
+                schema = new Schema({
+                    age: {
+                        type: Number,
+                        min: 3
+                    }
+                });
+
+                return expect(schema.validate({age: 2})).to.eventually.be.fulfilled;
             });
 
             describe("mixed validators", function () {
