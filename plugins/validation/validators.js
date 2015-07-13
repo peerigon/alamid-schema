@@ -43,7 +43,43 @@ function maxValidator(minValue) {
     };
 }
 
+/**
+ * returns a minLength validator
+ * @param {Number} minLength
+ * @return {Function}
+ */
+function minLengthValidator(minLength) {
+    return function validateMinLength(string) {
+        return string.length > minLength || "minLength";
+    }
+}
+
+/**
+ * returns a maxLength validator
+ * @param {Number} maxLength
+ * @returns {Function}
+ */
+function maxLengthValidators(maxLength) {
+    return function validateMaxLength(string) {
+        return string.length < maxLength || "maxLength"
+    }
+}
+
+/**
+ * returns a hasLength validator
+ * @param {Number} hasLength
+ * @return {Function}
+ */
+function hasLengthValidator(hasLength) {
+    return function validateHasLength(string) {
+        return string.length === hasLength || "hasLength"
+    }
+}
+
 exports.required = requiredValidator;
 exports.min = minValidator;
 exports.max = maxValidator;
 exports.enum = enumValidator;
+exports.minLength = minLengthValidator;
+exports.maxLength = maxLengthValidators;
+exports.hasLength = hasLengthValidator;
