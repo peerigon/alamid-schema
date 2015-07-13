@@ -86,6 +86,48 @@ describe("plugins/validation", function () {
                     expect(schema.validators.age[0].name).to.eql(validators.max().name);
                 });
 
+                it("should add a minLength validator", function () {
+
+                    var schema = new Schema({
+                        name: {
+                            type: String,
+                            minLength: 5
+                        }
+                    });
+
+                    expect(schema.validators.name).to.be.an("array");
+                    expect(schema.validators.name).to.have.length(1);
+                    expect(schema.validators.name[0].name).to.eql(validators.minLength().name);
+                });
+
+                it("should add a maxLength validator", function () {
+
+                    var schema = new Schema({
+                        name: {
+                            type: String,
+                            maxLength: 5
+                        }
+                    });
+
+                    expect(schema.validators.name).to.be.an("array");
+                    expect(schema.validators.name).to.have.length(1);
+                    expect(schema.validators.name[0].name).to.eql(validators.maxLength().name);
+                });
+
+                it("should add a hasLength validator", function () {
+
+                    var schema = new Schema({
+                        name: {
+                            type: String,
+                            hasLength: 5
+                        }
+                    });
+
+                    expect(schema.validators.name).to.be.an("array");
+                    expect(schema.validators.name).to.have.length(1);
+                    expect(schema.validators.name[0].name).to.eql(validators.hasLength().name);
+                });
+
             });
 
             describe("custom validators", function () {
