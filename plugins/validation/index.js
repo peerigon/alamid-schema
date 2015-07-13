@@ -97,6 +97,18 @@ function validationPlugin(Schema) {
                     this.validators[key].push(defaultValidators.max(fieldDefinition.max));
                 }
 
+                if (value(fieldDefinition.minLength).typeOf(Number)) {
+                    this.validators[key].push(defaultValidators.minLength(fieldDefinition.minLength));
+                }
+
+                if (value(fieldDefinition.maxLength).typeOf(Number)) {
+                    this.validators[key].push(defaultValidators.maxLength(fieldDefinition.maxLength));
+                }
+
+                if (value(fieldDefinition.hasLength).typeOf(Number)) {
+                    this.validators[key].push(defaultValidators.hasLength(fieldDefinition.hasLength));
+                }
+
                 //custom validators
                 if (value(fieldDefinition.validate).typeOf(Function)) {
                     this.validators[key].push(fieldDefinition.validate);
