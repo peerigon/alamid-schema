@@ -287,7 +287,7 @@ We included an [ES2015 shim](https://github.com/cujojs/when/tree/master/es6-shim
 
 Creates a new schema. 
 
-#### .fields(key1: Array|String, key2?: String, key3?: String, ...)
+#### .only(key1: Array|String, key2?: String, key3?: String, ...)
 
 Returns a subset with the given keys of the current schema. You may pass an array with keys or just the keys as arguments.
 
