@@ -169,15 +169,30 @@ describe("plugins/validation", function () {
         describe(".validate(model, callback)", function () {
             var schema;
 
-            it("should throw an error if model is not an object", function() {
+            it("should throw an error if model is not an object", function () {
                 var schema = new Schema({});
 
-                expect(function() { schema.validate(null, function() {}); }).to.throw(TypeError);
-                expect(function() { schema.validate(undefined, function() {}); }).to.throw(TypeError);
-                expect(function() { schema.validate("", function() {}); }).to.throw(TypeError);
-                expect(function() { schema.validate(12, function() {}); }).to.throw(TypeError);
+                expect(function () {
+                    schema.validate(null, function () {
+                    });
+                }).to.throw(TypeError);
+                expect(function () {
+                    schema.validate(undefined, function () {
+                    });
+                }).to.throw(TypeError);
+                expect(function () {
+                    schema.validate("", function () {
+                    });
+                }).to.throw(TypeError);
+                expect(function () {
+                    schema.validate(12, function () {
+                    });
+                }).to.throw(TypeError);
 
-                expect(function() { schema.validate({}, function() {}); }).to.not.throw(TypeError);
+                expect(function () {
+                    schema.validate({}, function () {
+                    });
+                }).to.not.throw(TypeError);
             });
 
             it("should reference the given model to the validation result", function (done) {
@@ -200,7 +215,7 @@ describe("plugins/validation", function () {
                     }
                 });
 
-                schema.validate({ age: 18 }, function (validation) {
+                schema.validate({age: 18}, function (validation) {
                     expect(validation.result).to.eql(true);
                     expect(validation.failedFields).to.eql({});
                     done();
@@ -219,22 +234,61 @@ describe("plugins/validation", function () {
                     }
                 });
 
-                schema.validate({ age: 18 }, function (validation) {
+                schema.validate({age: 18}, function (validation) {
                     expect(validation.result).to.eql(true);
                     expect(validation.failedFields).to.eql({});
                     done();
                 });
             });
 
-            it("should return a promise if no callback is given", function () {
-                schema = new Schema({
-                    age: {
-                        type: Number,
-                        min: 3
-                    }
+            describe("Promise signature", function () {
+
+                before(function () {
+                    schema = new Schema({
+                        age: {
+                            type: Number,
+                            min: 3
+                        }
+                    });
                 });
 
-                return expect(schema.validate({age: 2})).to.eventually.be.fulfilled;
+                it("should return a promise if no callback is given", function () {
+
+                    expect(schema.validate({age: 2})).to.be.a("promise");
+                });
+
+                it("should resolve if validation succeeds", function () {
+
+                    schema = new Schema({
+                        age: {
+                            type: Number,
+                            min: 3
+                        }
+                    });
+
+                    return schema.validate({age: 4})
+                    .then(function(validation) {
+                        expect(validation).to.eql({result: true, model: { age: 4 }, failedFields: {}});
+                    });
+                });
+
+                it("should reject if validation fails", function () {
+
+                    schema = new Schema({
+                        age: {
+                            type: Number,
+                            min: 5
+                        }
+                    });
+
+                    return schema.validate({age: 1})
+                        .then(function() {
+                            throw new Error("Should not resolve");
+                        })
+                        .catch(function(validation) {
+                           expect(validation).to.eql({result: false, model: { age: 1 }, failedFields: {age: ["min"]}});
+                        });
+                });
             });
 
             describe("mixed validators", function () {
@@ -260,7 +314,7 @@ describe("plugins/validation", function () {
                         }
                     });
 
-                    schema.validate({ age: 18 }, function (validation) {
+                    schema.validate({age: 18}, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.eql(true);
@@ -280,7 +334,7 @@ describe("plugins/validation", function () {
                         }
                     });
 
-                    schema.validate({ age: 6 }, function (validation) {
+                    schema.validate({age: 6}, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.eql(false);
@@ -304,7 +358,7 @@ describe("plugins/validation", function () {
                         }
                     });
 
-                    schema.validate({ age: 6 }, function (validation) {
+                    schema.validate({age: 6}, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.eql(false);
@@ -314,10 +368,10 @@ describe("plugins/validation", function () {
                 });
 
                 it("should fail if the sync validator fails & async passes", function (done) {
-                    var asyncSpy = chai.spy(function(age, callback) {
+                    var asyncSpy = chai.spy(function (age, callback) {
                             callback(true);
                         }),
-                        syncSpy = chai.spy(function(age) {
+                        syncSpy = chai.spy(function (age) {
                             return "fail-sync";
                         });
 
@@ -328,7 +382,7 @@ describe("plugins/validation", function () {
                         }
                     });
 
-                    schema.validate({ age: 8 }, function (validation) {
+                    schema.validate({age: 8}, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.eql(false);

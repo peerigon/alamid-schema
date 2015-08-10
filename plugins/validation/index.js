@@ -110,7 +110,7 @@ function validationPlugin(Schema) {
     /**
      * Validate if given model matches schema-definition
      * @param {Object} model
-     * @param {Function} callback
+     * @param {Function=} callback
      * @returns {Promise}
      */
     Schema.prototype.validate = function (model, callback) {
@@ -122,11 +122,11 @@ function validationPlugin(Schema) {
                 failedFields: {}
             };
 
-        if(value(model).notTypeOf(Object)) {
+        if (value(model).notTypeOf(Object)) {
             throw new TypeError("Model must be an object");
         }
 
-        if(!this.validators) {
+        if (!this.validators) {
             throw new Error("Validators not defined: Have you registered the validate plugin before any schema definitions?");
         }
 
@@ -139,17 +139,19 @@ function validationPlugin(Schema) {
 
             self.keys.forEach(function (key) {
                 pending++;
-                runValidation(self.validators[key], model[key], model, function (res) {
+                runValidation(self.validators[key], model[key], model, function (failedFields) {
                     pending--;
 
-                    if (res.length > 0) {
+                    if (failedFields.length > 0) {
                         result.result = false;
-                        result.failedFields[key] = res;
+                        result.failedFields[key] = failedFields;
                     }
 
+                    //was final call
                     if (pending === 0) {
-                        if (result === false) {
+                        if (result.result === false) {
                             reject(result);
+                            return;
                         }
 
                         resolve(result);
@@ -158,17 +160,11 @@ function validationPlugin(Schema) {
             });
         });
 
-        if (typeof callback === "function") {
-            promise
-                .then(function (res) {
-                    callback(res);
-                })
-                .catch(function (err) {
-                    callback(err);
-                });
-        } else {
+        if (!callback || typeof callback !== "function") {
             return promise;
         }
+
+        promise.then(callback, callback);
     };
 }
 
