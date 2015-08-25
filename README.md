@@ -277,7 +277,7 @@ PandaSchema.validate(panda)
   });
 ```
 
-We included an [ES2015 shim](https://github.com/cujojs/when/tree/master/es6-shim) in case you are using Node.js < 0.12 or a browser without native Promise support.
+__Important notice:__ You must bring your own ES6 Promise compatible polyfill!
 
 ## API 
 

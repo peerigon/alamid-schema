@@ -1,9 +1,5 @@
 "use strict";
 
-if (typeof Promise === "undefined") {
-    require("when/es6-shim/Promise");
-}
-
 var value = require("value"),
     defaultValidators = require("./validators.js");
 
