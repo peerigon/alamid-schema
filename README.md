@@ -161,6 +161,10 @@ var PandaSchema = new Schema({
         type: String,
         enum: ["happy", "sleepy"]
     },
+    treasures: {
+        type: Array,
+        minLength: 3
+    },
     birthday: Date
 });
 
@@ -199,6 +203,9 @@ _Included validators:_
 - min (Number)
 - max (Number)
 - enum 
+- minLength (String, Array)
+- maxLength (String, Array)
+- hasLength (String, Array)
 
 _Writing custom validators:_
  
