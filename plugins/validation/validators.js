@@ -49,8 +49,8 @@ function maxValidator(minValue) {
  * @return {Function}
  */
 function minLengthValidator(minLength) {
-    return function validateMinLength(string) {
-        return string.length > minLength || "minLength";
+    return function validateMinLength(lengthable) {
+        return lengthable.length > minLength || "minLength";
     }
 }
 
@@ -60,8 +60,8 @@ function minLengthValidator(minLength) {
  * @returns {Function}
  */
 function maxLengthValidators(maxLength) {
-    return function validateMaxLength(string) {
-        return string.length < maxLength || "maxLength"
+    return function validateMaxLength(lengthable) {
+        return lengthable.length < maxLength || "maxLength"
     }
 }
 
@@ -71,8 +71,8 @@ function maxLengthValidators(maxLength) {
  * @return {Function}
  */
 function hasLengthValidator(hasLength) {
-    return function validateHasLength(string) {
-        return string.length === hasLength || "hasLength"
+    return function validateHasLength(lengthable) {
+        return lengthable.length === hasLength || "hasLength"
     }
 }
 
