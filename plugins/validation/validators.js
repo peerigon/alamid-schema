@@ -50,7 +50,7 @@ function maxValidator(minValue) {
  */
 function minLengthValidator(minLength) {
     return function validateMinLength(lengthable) {
-        return lengthable.length > minLength || "minLength";
+        return lengthable.length >= minLength || "minLength";
     }
 }
 
@@ -61,7 +61,7 @@ function minLengthValidator(minLength) {
  */
 function maxLengthValidators(maxLength) {
     return function validateMaxLength(lengthable) {
-        return lengthable.length < maxLength || "maxLength"
+        return lengthable.length <= maxLength || "maxLength"
     }
 }
 
