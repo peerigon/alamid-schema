@@ -17,18 +17,28 @@ var PandaSchema = new Schema({
         type: String,
         enum: ["happy", "sleepy"]
     },
+    treasures: {
+        type: Array,
+        required: true,
+        maxLength: 3
+    },
     birthday: Date
 });
 
 var panda = {
     name: "Hugo",
     age: 3,
-    mood: "happy"
+    mood: "happy",
+    treasures: [
+        "Coconut",
+        "Water",
+        "Daughter"
+    ]
 };
 
-PandaSchema.validate(panda, function(validation) {
+PandaSchema.validate(panda, function (validation) {
 
-    if(!validation.result) {
+    if (!validation.result) {
         console.log(validation.failedFields);
         console.log("failed fields:", Object.keys(validation.failedFields).join(","));
         return;
