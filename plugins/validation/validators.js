@@ -55,7 +55,7 @@ function maxValidator(minValue) {
  */
 function minLengthValidator(minLength) {
     return function validateMinLength(lengthable) {
-        return lengthable && (lengthable.length >= minLength) || "minLength";
+        return lengthable && (lengthable.length >= minLength) || "min-length";
     };
 }
 
@@ -67,7 +67,7 @@ function minLengthValidator(minLength) {
  */
 function maxLengthValidators(maxLength) {
     return function validateMaxLength(lengthable) {
-        return lengthable && (lengthable.length <= maxLength) || "maxLength";
+        return lengthable && (lengthable.length <= maxLength) || "max-length";
     };
 }
 
@@ -79,7 +79,7 @@ function maxLengthValidators(maxLength) {
  */
 function hasLengthValidator(hasLength) {
     return function validateHasLength(lengthable) {
-        return lengthable && (lengthable.length === hasLength) || "hasLength";
+        return lengthable && (lengthable.length === hasLength) || "has-length";
     };
 }
 
