@@ -1,5 +1,5 @@
 alamid-schema
-========================================================================
+=============
 **Extendable mongoose-like schemas for node.js and the browser**
 
 [![npm status](https://nodei.co/npm/alamid-schema.svg?downloads=true&stars=true)](https://npmjs.org/package/alamid-schema)<br>
@@ -200,12 +200,12 @@ outputs...
 _Included validators:_  
 
 - required
-- min (Number)
-- max (Number)
+- min (works on Number)
+- max (works on Number)
 - enum 
-- minLength (String, Array)
-- maxLength (String, Array)
-- hasLength (String, Array)
+- minLength (works on String, Array)
+- maxLength (works on String, Array)
+- hasLength (works on String, Array)
 
 _Writing custom validators:_
  
@@ -213,21 +213,19 @@ You can write sync and async validators..
 
 ```javascript
 
-//sync
+// sync
 function oldEnough(age) {
     return age > 18 || "too-young";
 }
 
-//async
+// async
 function nameIsUnique(name, callback) {
-
     fs.readFile(__dirname + "/names.json", function(err, names) {
         if(err) {
             throw err;
         }
 
         names = JSON.parse(names);
-
         callback(names.indexOf(name) === -1 || "name-already-taken");
     });
 }
@@ -252,7 +250,6 @@ var panda = {
 };
 
 PandaSchema.validate(panda, function(validation) {
-
     if(!validation.result) {
         console.log(validation.failedFields);
         return;
@@ -279,9 +276,9 @@ Instead of using a callback it is possible to return a Promise instead.
 
 ```javascript
 PandaSchema.validate(panda)
-  .then(function (res) {
-	// ...
-  });
+	.then(function (res) {
+		// ...
+	});
 ```
 
 __Important notice:__ You must bring your own ES6 Promise compatible polyfill!
@@ -294,20 +291,20 @@ __Important notice:__ You must bring your own ES6 Promise compatible polyfill!
 
 Creates a new schema. 
 
-#### .only(key1: Array|String, key2?: String, key3?: String, ...)
+#### .only(key1: Array|String[, key2: String, key3: String, ...])
 
 Returns a subset with the given keys of the current schema. You may pass an array with keys or just the keys as arguments.
 
-#### .extend(name?: String, definition: Object)
+#### .extend([name: String, ]definition: Object)
 
 Creates a new schema that inherits from the current schema. Field definitions are merged where appropriate. 
 If a definition conflicts with the parent definition, the child's definition supersedes.
 
 ### Readable & Writable fields
 
-You can define readable and writable fields in the schema. As default every field is read- and writable.
+You can define readable and writable fields in the schema. By default, every field is read- and writable.
 
-```
+```javascript
 var PandaSchema = new Schema({
     id: {
         type: Number,
@@ -322,15 +319,40 @@ var PandaSchema = new Schema({
 };
 ```
 
-#### .getWritableFields()
-#### .getWritableSchema()
-#### .getReadableFields()
-#### .getReadableSchema()
+#### .writableFields()
+
+Returns an array containing the keys of all writable fields:
+
+```javascript
+PandaSchema.writableFields(); // ["name", "age", "mood", "treasures", "birthday"]
+```
+
+#### .writable()
+
+Creates a new schema that contains only the writable fields:
+
+```javascript
+var PandaWritableSchema = PandaSchema.writable();
+```
+
+#### .readableFields()
+
+Returns an array containing the keys of all readable fields:
+
+```javascript
+PandaSchema.readableFields(); // ["name", "age", "mood", "treasures", "birthday"]
+```
+
+#### .readable()
+
+Creates a new schema that contains only the readable fields:
+
+```javascript
+var PandaReadableSchema = PandaSchema.readable();
+```
 
 ### Plugin: Validation
 
-#### .validate(model: Object, callback: Function)
+#### .validate(model: Object[, callback: Function]): Promise
 
-Validate given model using the schema-definitions. 
-
-Callback will be called with a validation object with `result` (Boolean) and `failedFields` (Object).
+Validate given model using the schema definitions. Callback will be called/Promise will be fulfilled with a validation object with `result` (Boolean) and `failedFields` (Object) containing the error codes.
