@@ -164,14 +164,14 @@ function validationPlugin(Schema) {
                 resolve(result);
             }
 
-            if (self.keys.length === 0) {
+            if (self.fields.length === 0) {
                 done();
                 return;
             }
 
-            pending = self.keys.length;
+            pending = self.fields.length;
 
-            self.keys.forEach(function (key) {
+            self.fields.forEach(function (key) {
                 var fieldErrors = runValidation(self.validators[key], model[key], model, function onFieldValidation(fieldErrors) {
                     pending--;
                     handleFieldErrors(key, fieldErrors);

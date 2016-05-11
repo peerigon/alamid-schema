@@ -30,8 +30,8 @@ describe("Schema", function () {
 
         describe(".constructor(definition)", function () {
 
-            it("should extract the keys from the definition", function () {
-                expect(schema.keys).to.eql(["name", "age", "friends"]);
+            it("should extract the fields from the definition", function () {
+                expect(schema.fields).to.eql(["name", "age", "friends"]);
             });
 
             it("should extract the types from the definition if using Constructors", function () {
@@ -120,7 +120,7 @@ describe("Schema", function () {
                 expect(subset).not.to.equal(schema);
             });
 
-            it("should inherit all properties prototypically except 'keys'", function () {
+            it("should inherit all properties prototypically except 'fields'", function () {
                 var ownProperties = [];
                 var key;
 
@@ -130,14 +130,14 @@ describe("Schema", function () {
                         ownProperties.push(key);
                     }
                 }
-                expect(ownProperties).to.eql(["keys"]);
+                expect(ownProperties).to.eql(["fields"]);
                 expect(schema.types).to.be.an("object");
                 expect(schema.name).to.be.an("string");
             });
 
-            it("should change the .keys-property to the given keys", function () {
+            it("should change the .fields-property to the given keys", function () {
                 subset = schema.only("name", "age");
-                expect(subset.keys).to.eql(["name", "age"]);
+                expect(subset.fields).to.eql(["name", "age"]);
             });
 
             it("should throw an error if no keys are given", function () {
@@ -153,7 +153,7 @@ describe("Schema", function () {
 
             it("should just work like .only(key1, key2, kex3)", function () {
                 subset = schema.only(["name", "age"]);
-                expect(subset.keys).to.eql(["name", "age"]);
+                expect(subset.fields).to.eql(["name", "age"]);
             });
 
             it("should throw an error if no keys are given", function () {
@@ -172,7 +172,7 @@ describe("Schema", function () {
                 expect(subset).not.to.equal(schema);
             });
 
-            it("should inherit all properties prototypically except 'keys'", function () {
+            it("should inherit all properties prototypically except 'fields'", function () {
                 var ownProperties = [];
                 var key;
 
@@ -182,19 +182,19 @@ describe("Schema", function () {
                         ownProperties.push(key);
                     }
                 }
-                expect(ownProperties).to.eql(["keys"]);
+                expect(ownProperties).to.eql(["fields"]);
                 expect(schema.types).to.be.an("object");
                 expect(schema.name).to.be.an("string");
             });
 
-            it("should exclude the given keys from the keys-property", function () {
+            it("should exclude the given keys from the fields-property", function () {
                 subset = schema.except("friends", "age");
-                expect(subset.keys).to.eql(["name"]);
+                expect(subset.fields).to.eql(["name"]);
             });
 
             it("should throw an error if no keys are given", function () {
                 expect(function () {
-                    schema.except.apply(schema, schema.keys);
+                    schema.except.apply(schema, schema.fields);
                 }).to.throw("Cannot create a subset of the schema with no keys");
             });
 
@@ -205,12 +205,12 @@ describe("Schema", function () {
 
             it("should just work like .only(key1, key2, kex3)", function () {
                 subset = schema.only(["name", "age"]);
-                expect(subset.keys).to.eql(["name", "age"]);
+                expect(subset.fields).to.eql(["name", "age"]);
             });
 
             it("should throw an error if no keys are given", function () {
                 expect(function () {
-                    schema.except(schema.keys);
+                    schema.except(schema.fields);
                 }).to.throw("Cannot create a subset of the schema with no keys");
             });
 
@@ -223,7 +223,7 @@ describe("Schema", function () {
                 extended = schema.extend({});
 
                 expect(extended).to.not.equal(schema);
-                expect(extended.keys).to.not.equal(schema.keys);
+                expect(extended.fields).to.not.equal(schema.fields);
                 expect(extended.types).to.not.equal(schema.types);
                 expect(extended).to.eql(schema);
             });
@@ -236,7 +236,7 @@ describe("Schema", function () {
                     }
                 });
 
-                expect(extended.keys).to.contain("password", "token");
+                expect(extended.fields).to.contain("password", "token");
                 expect(extended.types.password).to.equal("String");
                 expect(extended.types.token).to.equal("String");
             });
@@ -273,7 +273,7 @@ describe("Schema", function () {
             it("should work like .extend(definition)", function () {
                 extended.name = schema.name;
 
-                expect(extended.keys).to.contain("password", "token");
+                expect(extended.fields).to.contain("password", "token");
                 expect(extended.types.password).to.equal("String");
                 expect(extended.types.token).to.equal("String");
             });
@@ -296,7 +296,7 @@ describe("Schema", function () {
                 var writableSchema = schema.writable();
 
                 expect(writableSchema).to.be.an.instanceOf(Schema);
-                expect(writableSchema.keys).to.eql(["age"]);
+                expect(writableSchema.fields).to.eql(["age"]);
             });
 
         });
@@ -317,7 +317,7 @@ describe("Schema", function () {
                 var readableSchema = schema.readable();
 
                 expect(readableSchema).to.be.an.instanceOf(Schema);
-                expect(readableSchema.keys).to.eql(["age", "friends"]);
+                expect(readableSchema.fields).to.eql(["age", "friends"]);
             });
 
         });

@@ -145,6 +145,7 @@ The validation plugins adds - *suprise!* - validation support.
 
 ```javascript
 var Schema = require("alamid-schema");
+
 Schema.use(require("alamid-schema/plugins/validation"));
 
 var PandaSchema = new Schema({
@@ -175,9 +176,8 @@ var panda = {
 };
 
 PandaSchema.validate(panda, function(validation) {
-
-    if(!validation.result) {
-        console.log(validation);
+    if (!validation.result) {
+        console.log(validation.errors);
         return;
     }
 
@@ -304,6 +304,10 @@ __Important notice:__ You must bring your own ES6 Promise compatible polyfill!
 #### Schema(name?: String, definition: Object)
 
 Creates a new schema.
+
+#### .fields: Array
+
+The array of property names that are defined on the schema. Do not modify this array.
 
 #### .only(key1: Array|String[, key2: String, key3: String, ...])
 
