@@ -250,7 +250,7 @@ describe("plugins/validation", function () {
 
                 schema.validate({ age: 18 }, function (validation) {
                     expect(validation.result).to.eql(true);
-                    expect(validation.failedFields).to.eql({});
+                    expect(validation.errors).to.eql({});
                     done();
                 });
             });
@@ -269,7 +269,7 @@ describe("plugins/validation", function () {
 
                 schema.validate({ age: 18 }, function (validation) {
                     expect(validation.result).to.eql(true);
-                    expect(validation.failedFields).to.eql({});
+                    expect(validation.errors).to.eql({});
                     done();
                 });
             });
@@ -301,7 +301,7 @@ describe("plugins/validation", function () {
 
                     return schema.validate({ age: 4 })
                     .then(function (validation) {
-                        expect(validation).to.eql({ result: true, model: { age: 4 }, failedFields: {} });
+                        expect(validation).to.eql({ result: true, model: { age: 4 }, errors: {} });
                     });
                 });
 
@@ -319,7 +319,7 @@ describe("plugins/validation", function () {
                             throw new Error("Should not resolve");
                         })
                         .catch(function (validation) {
-                            expect(validation).to.eql({ result: false, model: { age: 1 }, failedFields: { age: ["min"] } });
+                            expect(validation).to.eql({ result: false, model: { age: 1 }, errors: { age: ["min"] } });
                         });
                 });
             });
@@ -351,7 +351,7 @@ describe("plugins/validation", function () {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.eql(true);
-                        expect(validation.failedFields).to.eql({});
+                        expect(validation.errors).to.eql({});
                         done();
                     });
                 });
@@ -371,7 +371,7 @@ describe("plugins/validation", function () {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.eql(false);
-                        expect(validation.failedFields.age).to.contain("fail-async", "fail-sync");
+                        expect(validation.errors.age).to.contain("fail-async", "fail-sync");
                         done();
                     });
                 });
@@ -395,7 +395,7 @@ describe("plugins/validation", function () {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.eql(false);
-                        expect(validation.failedFields.age).to.contain("fail-async");
+                        expect(validation.errors.age).to.contain("fail-async");
                         done();
                     });
                 });
@@ -419,7 +419,7 @@ describe("plugins/validation", function () {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.equal(false);
-                        expect(validation.failedFields.age).to.contain("fail-sync");
+                        expect(validation.errors.age).to.contain("fail-sync");
                         done();
                     });
                 });

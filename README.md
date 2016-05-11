@@ -9,7 +9,7 @@ alamid-schema
 
 If you like [mongoose](http://mongoosejs.com/) schemas and you want to use them standalone, **alamid-schema** is the right module for you.
 
-__alamid-schema__ helps you with 
+__alamid-schema__ helps you with
 
 - validation of data
 - using mongoose-like schemas without using mongoose
@@ -18,11 +18,11 @@ __alamid-schema__ helps you with
 - striping readable/writeable fields (coming soon)
 
 Use it on the server to...
- - normalize and validate incoming requests 
+ - normalize and validate incoming requests
  - strip private fields from the response
-   
-Use it on the client to... 
-- validate forms 
+
+Use it on the client to...
+- validate forms
 - define view models
 
 ```javascript
@@ -60,7 +60,7 @@ var PandaSchema = new Schema({
 });
 ```
 
-...or with abstract types... 
+...or with abstract types...
 
 ```javascript
 var PandaSchema = new Schema({
@@ -72,7 +72,7 @@ var PandaSchema = new Schema({
 });
 ```
 
-### Extend 
+### Extend
 
 Sometimes you want to extend your Schema and add new properties.
 
@@ -92,7 +92,7 @@ var SuperPanda = PandaSchema.extend("SuperPanda", {
         type: Boolean
     }
 });
-``` 
+```
 
 We have a superpanda now... which can fly and has xray eyes!
 That's basically the same as...
@@ -105,16 +105,16 @@ var SuperPanda = new Schema({
         type: Array
     },
     xRay: true, //added
-    canFly: {   //added 
+    canFly: {   //added
         type: Boolean
     }
 });
 ```
 
 
-__Overwriting properties__ 
+__Overwriting properties__
 
-If you define a property in the schema you are extending with, the extending schema takes precedence. 
+If you define a property in the schema you are extending with, the extending schema takes precedence.
 
 
 ```javascript
@@ -135,13 +135,13 @@ equals...
 var Panda = new Schema("Panda", {
     name: String,
     age: Number,   //overwritten
-    color: String  //added 
+    color: String  //added
 });
 ```
 
 ### Plugin: Validation
 
-The validation plugins adds - *suprise!* - validation support.  
+The validation plugins adds - *suprise!* - validation support.
 
 ```javascript
 var Schema = require("alamid-schema");
@@ -185,31 +185,31 @@ PandaSchema.validate(panda, function(validation) {
 });
 ```
 
-outputs... 
+outputs...
 
 ```javascript
 {
     result: false,
-    failedFields: {
-        age: [ 'min' ] 
+    errors: {
+        age: [ 'min' ]
     }
 }
 ```
 
 
-_Included validators:_  
+_Included validators:_
 
 - required
 - min (works on Number)
 - max (works on Number)
-- enum 
+- enum
 - minLength (works on String, Array)
 - maxLength (works on String, Array)
 - hasLength (works on String, Array)
 
 _Writing custom validators:_
- 
-You can write sync and async validators.. 
+
+You can write sync and async validators..
 
 ```javascript
 
@@ -251,24 +251,24 @@ var panda = {
 
 PandaSchema.validate(panda, function(validation) {
     if(!validation.result) {
-        console.log(validation.failedFields);
+        console.log(validation.errors);
         return;
     }
     console.log("happy panda");
 });
-``` 
+```
 
-outputs... 
+outputs...
 
 
 ```javascript
-{ 
-    name: [ "name-already-taken" ], 
+{
+    name: [ "name-already-taken" ],
     age:  [ "too-young" ]
 }
 ```
 
-_Note:_ validators will be called with `this` bound to `model`. 
+_Note:_ validators will be called with `this` bound to `model`.
 
 ### Promises
 
@@ -283,13 +283,13 @@ PandaSchema.validate(panda)
 
 __Important notice:__ You must bring your own ES6 Promise compatible polyfill!
 
-## API 
+## API
 
-### Core 
+### Core
 
 #### Schema(name?: String, definition: Object)
 
-Creates a new schema. 
+Creates a new schema.
 
 #### .only(key1: Array|String[, key2: String, key3: String, ...])
 
@@ -297,7 +297,7 @@ Returns a subset with the given keys of the current schema. You may pass an arra
 
 #### .extend([name: String, ]definition: Object)
 
-Creates a new schema that inherits from the current schema. Field definitions are merged where appropriate. 
+Creates a new schema that inherits from the current schema. Field definitions are merged where appropriate.
 If a definition conflicts with the parent definition, the child's definition supersedes.
 
 ### Readable & Writable fields
@@ -355,4 +355,4 @@ var PandaReadableSchema = PandaSchema.readable();
 
 #### .validate(model: Object[, callback: Function]): Promise
 
-Validate given model using the schema definitions. Callback will be called/Promise will be fulfilled with a validation object with `result` (Boolean) and `failedFields` (Object) containing the error codes.
+Validate given model using the schema definitions. Callback will be called/Promise will be fulfilled with a validation object with `result` (Boolean) and `errors` (Object) containing the error codes.

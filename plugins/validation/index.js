@@ -123,7 +123,7 @@ function validationPlugin(Schema) {
         var result = {
             model: model,
             result: true,
-            failedFields: {}
+            errors: {}
         };
         var promise;
 
@@ -144,12 +144,12 @@ function validationPlugin(Schema) {
 
             self.keys.forEach(function (key) {
                 pending++;
-                runValidation(self.validators[key], model[key], model, function (failedFields) {
+                runValidation(self.validators[key], model[key], model, function (errors) {
                     pending--;
 
-                    if (failedFields.length > 0) {
+                    if (errors.length > 0) {
                         result.result = false;
-                        result.failedFields[key] = failedFields;
+                        result.errors[key] = errors;
                     }
 
                     // was final call

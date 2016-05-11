@@ -40,8 +40,8 @@ PandaSchema = new Schema({
 
 PandaSchema.validate(panda, function (validation) {
     if (!validation.result) {
-        console.log(validation.failedFields);
-        console.log("failed fields:", Object.keys(validation.failedFields).join(","));
+        console.log(validation.errors);
+        console.log("failed fields:", Object.keys(validation.errors).join(","));
         return;
     }
 
