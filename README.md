@@ -281,6 +281,9 @@ PandaSchema.validate(panda)
 	})
 ```
 
+The promise will still be resolved even when the validation fails, because a failed validation is
+not an error, it's an expected state. 
+
 The promise provides a reference to the final validation result object. It contains the intermediate
 result of all synchronous validators:
 

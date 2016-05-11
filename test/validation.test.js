@@ -303,7 +303,7 @@ describe("plugins/validation", function () {
                     });
                 });
 
-                it("should reject if validation fails", function () {
+                it("should not reject if validation fails", function () {
                     schema = new Schema({
                         age: {
                             type: Number,
@@ -312,11 +312,11 @@ describe("plugins/validation", function () {
                     });
 
                     return schema.validate({ age: 1 })
-                        .then(function () {
-                            throw new Error("Should not resolve");
-                        })
-                        .catch(function (validation) {
+                        .then(function (validation) {
                             expect(validation).to.eql({ result: false, model: { age: 1 }, errors: { age: ["min"] } });
+                        })
+                        .catch(function () {
+                            throw new Error("Should not reject");
                         });
                 });
 

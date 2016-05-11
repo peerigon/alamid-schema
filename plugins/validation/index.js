@@ -156,12 +156,12 @@ function validationPlugin(Schema) {
             throw new Error("Validators not defined: Have you registered the validate plugin before any schema definitions?");
         }
 
-        promise = new Promise(function (resolve, reject) {
+        promise = new Promise(function (resolve) {
             function done() {
                 if (typeof callback === "function") {
                     setTimeout(doCallback, 0);
                 }
-                result.result ? resolve(result) : reject(result);
+                resolve(result);
             }
 
             if (self.keys.length === 0) {
