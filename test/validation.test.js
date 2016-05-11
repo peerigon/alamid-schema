@@ -286,12 +286,10 @@ describe("plugins/validation", function () {
                 });
 
                 it("should return a promise if no callback is given", function () {
-
                     expect(schema.validate({ age: 2 })).to.be.a("promise");
                 });
 
                 it("should resolve if validation succeeds", function () {
-
                     schema = new Schema({
                         age: {
                             type: Number,
@@ -306,7 +304,6 @@ describe("plugins/validation", function () {
                 });
 
                 it("should reject if validation fails", function () {
-
                     schema = new Schema({
                         age: {
                             type: Number,
@@ -322,6 +319,41 @@ describe("plugins/validation", function () {
                             expect(validation).to.eql({ result: false, model: { age: 1 }, errors: { age: ["min"] } });
                         });
                 });
+
+                it("should provide the intermediate result of all synchronous validators", function () {
+                    var intermediateResult;
+
+                    schema = new Schema({
+                        age: {
+                            type: Number,
+                            min: 5,
+                            validate: [
+                                function syncTrue() {
+                                    return true;
+                                },
+                                function asyncTrue(value, callback) {
+                                    setTimeout(function () {
+                                        callback(true);
+                                    }, 0);
+                                },
+                                function syncFail() {
+                                    return "sync-fail";
+                                },
+                                function asyncFail(value, callback) {
+                                    setTimeout(function () {
+                                        callback("async-fail");
+                                    }, 0);
+                                }
+                            ]
+                        }
+                    });
+
+                    intermediateResult = schema.validate({ age: 1 }).validation;
+
+                    expect(intermediateResult.result).to.equal(false);
+                    expect(intermediateResult.errors.age).to.eql(["min", "sync-fail"]);
+                });
+
             });
 
             describe("mixed validators", function () {
@@ -400,9 +432,31 @@ describe("plugins/validation", function () {
                     });
                 });
 
+                it("should degrade gracefully with an false async validator", function (done) {
+                    var falseAsyncSpy = chai.spy(function (age, callback) {
+                        callback("fail-false-async"); // callback is called synchronously. This is a common error.
+                    });
+
+                    schema = new Schema({
+                        age: {
+                            type: Number,
+                            validate: falseAsyncSpy
+                        }
+                    });
+
+                    schema.validate({ age: 8 }, function (validation) {
+                        expect(falseAsyncSpy).to.have.been.called.once();
+                        expect(validation.result).to.equal(false);
+                        expect(validation.errors.age).to.contain("fail-false-async");
+                        done();
+                    });
+                });
+
                 it("should fail if the sync validator fails & async passes", function (done) {
                     var asyncSpy = chai.spy(function (age, callback) {
-                        callback(true);
+                        setTimeout(function () {
+                            callback("fail-async");
+                        }, 0);
                     });
                     var syncSpy = chai.spy(function (age) {
                         return "fail-sync";

@@ -272,13 +272,24 @@ _Note:_ validators will be called with `this` bound to `model`.
 
 ### Promises
 
-Instead of using a callback it is possible to return a Promise instead.
+The `validate()` method also returns a promise:
 
 ```javascript
 PandaSchema.validate(panda)
-	.then(function (res) {
-		// ...
-	});
+	.then(function (validation) {
+		...
+	})
+```
+
+The promise provides a reference to the final validation result object. It contains the intermediate
+result of all synchronous validators:
+
+```javascript
+var promise = PandaSchema.validate(panda);
+
+if (promise.validation.result) {
+    console.log("Synchronous validation of " + Object.keys(validation.errors) + " failed");
+}
 ```
 
 __Important notice:__ You must bring your own ES6 Promise compatible polyfill!

@@ -6,44 +6,53 @@ var defaultValidators = require("./validators.js");
 /**
  * Runs the given validators on a single field.
  *
+ * Caution: callback will be called in synchronously in some situations. This behavior should usually be avoided in
+ * public APIs, but since runValidation() is internal, we know how to deal with it. It allows us to speed up
+ * validation and to return all synchronous validation results as soon as possible.
+ *
+ * The final callback, however, is guaranteed to be asynchronous.
+ *
  * @param {Array} validators
  * @param {*} field
  * @param {Object} context
  * @param {Function} callback
+ * @returns {Array}
  */
 function runValidation(validators, field, context, callback) {
-    var result = [];
-    var pending = validators.length;
+    var fieldErrors = [];
+    var pending = 0;
 
-    // Return immediately if the field has no validator defined
-    if (pending === 0) {
-        setTimeout(function () {
-            return callback(result);
-        }, 0);
+    function saveResult(result) {
+        if (result !== true) {
+            fieldErrors.push(result);
+        }
     }
 
-    function validationDone(res) {
+    function doCallback() {
+        callback(fieldErrors);
+    }
+
+    function asyncValidationDone(result) {
+        saveResult(result);
         pending--;
-
-        if (res !== true) {
-            result.push(res);
-        }
-
-        if (pending === 0) {
-            callback(result);
-            return;
-        }
+        pending === 0 && doCallback();
     }
 
     validators.forEach(function (validator) {
         if (validator.length === 2) {
-            validator.call(context, field, validationDone);
+            pending++;
+            validator.call(context, field, asyncValidationDone);
         } else {
-            setTimeout(function () {
-                validationDone(validator.call(context, field));
-            }, 0);
+            saveResult(validator.call(context, field));
         }
     });
+
+    if (pending === 0) {
+        // synchronous callback
+        doCallback();
+    }
+
+    return fieldErrors;
 }
 
 /**
@@ -111,7 +120,8 @@ function validationPlugin(Schema) {
     };
 
     /**
-     * Validate if given model matches schema-definition.
+     * Validate if given model matches schema definition. Returns a promise with the validation result object
+     * which contains the intermediate result of all synchronous validators.
      *
      * @param {Object} model
      * @param {Function=} callback
@@ -127,6 +137,17 @@ function validationPlugin(Schema) {
         };
         var promise;
 
+        function handleFieldErrors(key, fieldErrors) {
+            if (fieldErrors.length > 0) {
+                result.result = false;
+                result.errors[key] = fieldErrors;
+            }
+        }
+
+        function doCallback() {
+            callback(result);
+        }
+
         if (value(model).notTypeOf(Object)) {
             throw new TypeError("Model must be an object");
         }
@@ -136,38 +157,35 @@ function validationPlugin(Schema) {
         }
 
         promise = new Promise(function (resolve, reject) {
-            if (self.keys.length === 0) {
-                setTimeout(function () {
-                    resolve(result);
-                }, 0);
+            function done() {
+                if (typeof callback === "function") {
+                    setTimeout(doCallback, 0);
+                }
+                result.result ? resolve(result) : reject(result);
             }
 
+            if (self.keys.length === 0) {
+                done();
+                return;
+            }
+
+            pending = self.keys.length;
+
             self.keys.forEach(function (key) {
-                pending++;
-                runValidation(self.validators[key], model[key], model, function (errors) {
+                var fieldErrors = runValidation(self.validators[key], model[key], model, function onFieldValidation(fieldErrors) {
                     pending--;
+                    handleFieldErrors(key, fieldErrors);
 
-                    if (errors.length > 0) {
-                        result.result = false;
-                        result.errors[key] = errors;
-                    }
-
-                    // was final call
                     if (pending === 0) {
-                        if (result.result === false) {
-                            reject(result);
-                            return;
-                        }
-
-                        resolve(result);
+                        done();
                     }
                 });
+
+                handleFieldErrors(key, fieldErrors);
             });
         });
-
-        if (typeof callback === "function") {
-            promise.then(callback, callback);
-        }
+        // Attach intermediate result to promise
+        promise.validation = result;
 
         return promise;
     };
