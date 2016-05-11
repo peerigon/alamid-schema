@@ -1,19 +1,21 @@
 "use strict";
 
 /**
- * returns a required validator
+ * Returns a required validator.
+ *
  * @returns {Function}
  */
 function requiredValidator() {
     return function validateRequired(val) {
-        return (val !== undefined && val !== null && val !== "") || "required";
+        return (typeof val !== "undefined" && val !== null && val !== "") || "required";
     };
 }
 
 /**
- * returns an enum validator
+ * Returns an enum validator.
+ *
  * @param {Array} enumValues
- * @return {Function}
+ * @returns {Function}
  */
 function enumValidator(enumValues) {
     return function validateEnum(val) {
@@ -22,9 +24,10 @@ function enumValidator(enumValues) {
 }
 
 /**
- * returns a min validator
- * @param {Number} minValue
- * @return {Function}
+ * Returns a min validator.
+ *
+ * @param {number} minValue
+ * @returns {Function}
  */
 function minValidator(minValue) {
     return function validateMin(val) {
@@ -33,9 +36,10 @@ function minValidator(minValue) {
 }
 
 /**
- * returns a max validator
- * @param {Number} minValue
- * @return {Function}
+ * Returns a max validator.
+ *
+ * @param {number} minValue
+ * @returns {Function}
  */
 function maxValidator(minValue) {
     return function validateMax(val) {
@@ -44,36 +48,39 @@ function maxValidator(minValue) {
 }
 
 /**
- * returns a minLength validator
- * @param {Number} minLength
- * @return {Function}
+ * Returns a minLength validator.
+ *
+ * @param {number} minLength
+ * @returns {Function}
  */
 function minLengthValidator(minLength) {
     return function validateMinLength(lengthable) {
         return lengthable && (lengthable.length >= minLength) || "minLength";
-    }
+    };
 }
 
 /**
- * returns a maxLength validator
- * @param {Number} maxLength
+ * Returns a maxLength validator.
+ *
+ * @param {number} maxLength
  * @returns {Function}
  */
 function maxLengthValidators(maxLength) {
     return function validateMaxLength(lengthable) {
-        return lengthable && (lengthable.length <= maxLength) || "maxLength"
-    }
+        return lengthable && (lengthable.length <= maxLength) || "maxLength";
+    };
 }
 
 /**
- * returns a hasLength validator
- * @param {Number} hasLength
- * @return {Function}
+ * Returns a hasLength validator.
+ *
+ * @param {number} hasLength
+ * @returns {Function}
  */
 function hasLengthValidator(hasLength) {
     return function validateHasLength(lengthable) {
-        return lengthable && (lengthable.length === hasLength) || "hasLength"
-    }
+        return lengthable && (lengthable.length === hasLength) || "hasLength";
+    };
 }
 
 exports.required = requiredValidator;

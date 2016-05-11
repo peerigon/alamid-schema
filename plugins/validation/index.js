@@ -1,20 +1,19 @@
 "use strict";
 
-var value = require("value"),
-    defaultValidators = require("./validators.js");
+var value = require("value");
+var defaultValidators = require("./validators.js");
 
 /**
- * Runs the given validators on a single field
+ * Runs the given validators on a single field.
  *
- * @private
  * @param {Array} validators
  * @param {*} field
  * @param {Object} context
  * @param {Function} callback
  */
 function runValidation(validators, field, context, callback) {
-    var result = [],
-        pending = validators.length;
+    var result = [];
+    var pending = validators.length;
 
     // Return immediately if the field has no validator defined
     if (pending === 0) {
@@ -32,17 +31,14 @@ function runValidation(validators, field, context, callback) {
 
         if (pending === 0) {
             callback(result);
+            return;
         }
     }
 
     validators.forEach(function (validator) {
-        //async
         if (validator.length === 2) {
             validator.call(context, field, validationDone);
-        }
-        //sync
-        else {
-            //no setImmediate on client!
+        } else {
             setTimeout(function () {
                 validationDone(validator.call(context, field));
             }, 0);
@@ -51,23 +47,22 @@ function runValidation(validators, field, context, callback) {
 }
 
 /**
- * Adds validation methods to the schema
+ * Adds validation methods to the schema.
  *
  * @param {Function} Schema
  */
 function validationPlugin(Schema) {
-
     var constructor = Schema.prototype.constructor;
 
     Schema.prototype.constructor = function (name, schema) {
-        var key,
-            fieldDefinition;
+        var key;
+        var fieldDefinition;
 
         if (arguments.length === 1) {
             schema = arguments[0];
         }
 
-        //call super constructor
+        // call super constructor
         constructor.apply(this, arguments);
 
         this.validators = {};
@@ -77,7 +72,7 @@ function validationPlugin(Schema) {
                 fieldDefinition = schema[key];
                 this.validators[key] = [];
 
-                //predefined validators
+                // predefined validators
                 if (fieldDefinition.required) {
                     this.validators[key].push(defaultValidators.required());
                 }
@@ -105,7 +100,7 @@ function validationPlugin(Schema) {
                     this.validators[key].push(defaultValidators.hasLength(fieldDefinition.hasLength));
                 }
 
-                //custom validators
+                // custom validators
                 if (value(fieldDefinition.validate).typeOf(Function)) {
                     this.validators[key].push(fieldDefinition.validate);
                 } else if (value(fieldDefinition.validate).typeOf(Array)) {
@@ -116,19 +111,21 @@ function validationPlugin(Schema) {
     };
 
     /**
-     * Validate if given model matches schema-definition
+     * Validate if given model matches schema-definition.
+     *
      * @param {Object} model
      * @param {Function=} callback
      * @returns {Promise}
      */
     Schema.prototype.validate = function (model, callback) {
-        var self = this,
-            pending = 0,
-            result = {
-                model: model,
-                result: true,
-                failedFields: {}
-            };
+        var self = this;
+        var pending = 0;
+        var result = {
+            model: model,
+            result: true,
+            failedFields: {}
+        };
+        var promise;
 
         if (value(model).notTypeOf(Object)) {
             throw new TypeError("Model must be an object");
@@ -138,7 +135,7 @@ function validationPlugin(Schema) {
             throw new Error("Validators not defined: Have you registered the validate plugin before any schema definitions?");
         }
 
-        var promise = new Promise(function (resolve, reject) {
+        promise = new Promise(function (resolve, reject) {
             if (self.keys.length === 0) {
                 setTimeout(function () {
                     resolve(result);
@@ -155,7 +152,7 @@ function validationPlugin(Schema) {
                         result.failedFields[key] = failedFields;
                     }
 
-                    //was final call
+                    // was final call
                     if (pending === 0) {
                         if (result.result === false) {
                             reject(result);
@@ -168,11 +165,11 @@ function validationPlugin(Schema) {
             });
         });
 
-        if (!callback || typeof callback !== "function") {
-            return promise;
+        if (typeof callback === "function") {
+            promise.then(callback, callback);
         }
 
-        promise.then(callback, callback);
+        return promise;
     };
 }
 

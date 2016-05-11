@@ -1,0 +1,8 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "extends": [
+    "peerigon/tests"
+  ]
+}

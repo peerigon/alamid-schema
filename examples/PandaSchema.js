@@ -25,3 +25,5 @@ var Panda = new Schema("Panda", {
         writable: false
     }
 });
+
+console.log(Panda);

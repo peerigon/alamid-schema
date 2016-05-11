@@ -1,0 +1,14 @@
+{
+    "root": true,
+    "extends": [
+        "peerigon/base",
+        "peerigon/es5"
+    ],
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "globals": {
+        "Promise": true
+    }
+}

@@ -16,3 +16,5 @@ var SuperPanda = PandaSchema.extend("SuperPanda", {
         type: Boolean
     }
 });
+
+console.log(SuperPanda);

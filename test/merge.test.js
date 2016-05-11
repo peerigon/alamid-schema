@@ -7,8 +7,8 @@ var merge = require("../lib/merge.js");
 chai.config.includeStack = true;
 
 describe("merge(source, target)", function () {
-    var a,
-        b;
+    var a;
+    var b;
 
     it("should copy all properties from source to target", function () {
         a = {
@@ -37,8 +37,8 @@ describe("merge(source, target)", function () {
     });
 
     it("should not alter the source", function () {
-        var a = {},
-            b = { b: "b" };
+        var a = {};
+        var b = { b: "b" };
 
         merge(a, b);
 
@@ -48,12 +48,12 @@ describe("merge(source, target)", function () {
     it("should merge the object if a property is an object both on the source and on the target", function () {
         a = {
             1: {
-               1: "1"
+                1: "1"
             }
         };
         b = {
             1: {
-               2: "2"
+                2: "2"
             }
         };
 
@@ -61,8 +61,8 @@ describe("merge(source, target)", function () {
 
         expect(b).to.eql({
             1: {
-               1: "1",
-               2: "2"
+                1: "1",
+                2: "2"
             }
         });
     });

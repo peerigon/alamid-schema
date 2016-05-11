@@ -1,17 +1,12 @@
 "use strict";
 
-var chai = require("chai"),
-    expect = chai.expect,
-    spies = require('chai-spies'),
-    chaiAsPromised = require("chai-as-promised");
-
-var Schema = require("../lib/Schema.js"),
-    validators = require("../plugins/validation/validators.js"),
-    validationPlugin = require("../plugins/validation/index.js");
-
-chai.use(spies);
-chai.use(chaiAsPromised);
-chai.Assertion.includeStack = true;
+var chai = require("chai");
+var spies = require("chai-spies");
+var chaiAsPromised = require("chai-as-promised");
+var Schema = require("../lib/Schema.js");
+var validators = require("../plugins/validation/validators.js");
+var validationPlugin = require("../plugins/validation/index.js");
+var expect = chai.expect;
 
 function oldEnough(age) {
     return age > 18 || "too-young";
@@ -21,6 +16,9 @@ function notTooOld(age) {
     return age < 99 || "too-old";
 }
 
+chai.use(spies);
+chai.use(chaiAsPromised);
+chai.config.includeStack = true;
 Schema.use(validationPlugin);
 
 describe("plugins/validation", function () {
@@ -45,11 +43,10 @@ describe("plugins/validation", function () {
                 });
 
                 it("should add a enum validator", function () {
-
                     var schema = new Schema({
                         tags: {
                             type: String,
-                            "enum": ["a", "b"]
+                            enum: ["a", "b"]
                         }
                     });
 
@@ -59,7 +56,6 @@ describe("plugins/validation", function () {
                 });
 
                 it("should add a min validator", function () {
-
                     var schema = new Schema({
                         age: {
                             type: Number,
@@ -73,7 +69,6 @@ describe("plugins/validation", function () {
                 });
 
                 it("should add a max validator", function () {
-
                     var schema = new Schema({
                         age: {
                             type: Number,
@@ -87,7 +82,6 @@ describe("plugins/validation", function () {
                 });
 
                 it("should add a minLength validator", function () {
-
                     var schema = new Schema({
                         name: {
                             type: String,
@@ -115,7 +109,6 @@ describe("plugins/validation", function () {
                 });
 
                 it("should add a hasLength validator", function () {
-
                     var schema = new Schema({
                         name: {
                             type: String,
@@ -133,7 +126,6 @@ describe("plugins/validation", function () {
             describe("custom validators", function () {
 
                 it("should accept a single validation function", function () {
-
                     var schema = new Schema({
                         age: {
                             type: Number,
@@ -147,7 +139,6 @@ describe("plugins/validation", function () {
                 });
 
                 it("should accept an array of validation functions", function () {
-
                     var schema = new Schema({
                         age: {
                             type: Number,
@@ -186,19 +177,19 @@ describe("plugins/validation", function () {
 
                 it("should merge all specified validators", function () {
                     var schema = new Schema({
-                            age: {
-                                required: true,
-                                max: 99,
-                                validate: oldEnough
-                            }
-                        }),
-                        extended = schema.extend({
-                            age: {
-                                required: false,
-                                validate: notTooOld
-                            }
-                        }),
-                        ageValidators = extended.validators.age.toString();
+                        age: {
+                            required: true,
+                            max: 99,
+                            validate: oldEnough
+                        }
+                    });
+                    var extended = schema.extend({
+                        age: {
+                            required: false,
+                            validate: notTooOld
+                        }
+                    });
+                    var ageValidators = extended.validators.age.toString();
 
                     expect(ageValidators).to.contain(validators.max(), oldEnough, notTooOld);
                     expect(ageValidators).to.not.contain(validators.required());
@@ -257,7 +248,7 @@ describe("plugins/validation", function () {
                     }
                 });
 
-                schema.validate({age: 18}, function (validation) {
+                schema.validate({ age: 18 }, function (validation) {
                     expect(validation.result).to.eql(true);
                     expect(validation.failedFields).to.eql({});
                     done();
@@ -276,7 +267,7 @@ describe("plugins/validation", function () {
                     }
                 });
 
-                schema.validate({age: 18}, function (validation) {
+                schema.validate({ age: 18 }, function (validation) {
                     expect(validation.result).to.eql(true);
                     expect(validation.failedFields).to.eql({});
                     done();
@@ -296,7 +287,7 @@ describe("plugins/validation", function () {
 
                 it("should return a promise if no callback is given", function () {
 
-                    expect(schema.validate({age: 2})).to.be.a("promise");
+                    expect(schema.validate({ age: 2 })).to.be.a("promise");
                 });
 
                 it("should resolve if validation succeeds", function () {
@@ -308,9 +299,9 @@ describe("plugins/validation", function () {
                         }
                     });
 
-                    return schema.validate({age: 4})
-                    .then(function(validation) {
-                        expect(validation).to.eql({result: true, model: { age: 4 }, failedFields: {}});
+                    return schema.validate({ age: 4 })
+                    .then(function (validation) {
+                        expect(validation).to.eql({ result: true, model: { age: 4 }, failedFields: {} });
                     });
                 });
 
@@ -323,12 +314,12 @@ describe("plugins/validation", function () {
                         }
                     });
 
-                    return schema.validate({age: 1})
-                        .then(function() {
+                    return schema.validate({ age: 1 })
+                        .then(function () {
                             throw new Error("Should not resolve");
                         })
-                        .catch(function(validation) {
-                           expect(validation).to.eql({result: false, model: { age: 1 }, failedFields: {age: ["min"]}});
+                        .catch(function (validation) {
+                            expect(validation).to.eql({ result: false, model: { age: 1 }, failedFields: { age: ["min"] } });
                         });
                 });
             });
@@ -346,8 +337,8 @@ describe("plugins/validation", function () {
                 }
 
                 it("should pass if async & sync validators pass", function (done) {
-                    var asyncSpy = chai.spy(validateAgeAsync),
-                        syncSpy = chai.spy(validateAgeSync);
+                    var asyncSpy = chai.spy(validateAgeAsync);
+                    var syncSpy = chai.spy(validateAgeSync);
 
                     schema = new Schema({
                         age: {
@@ -356,7 +347,7 @@ describe("plugins/validation", function () {
                         }
                     });
 
-                    schema.validate({age: 18}, function (validation) {
+                    schema.validate({ age: 18 }, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.eql(true);
@@ -366,8 +357,8 @@ describe("plugins/validation", function () {
                 });
 
                 it("should fail if an async and sync validator fail", function (done) {
-                    var asyncSpy = chai.spy(validateAgeAsync),
-                        syncSpy = chai.spy(validateAgeSync);
+                    var asyncSpy = chai.spy(validateAgeAsync);
+                    var syncSpy = chai.spy(validateAgeSync);
 
                     schema = new Schema({
                         age: {
@@ -376,7 +367,7 @@ describe("plugins/validation", function () {
                         }
                     });
 
-                    schema.validate({age: 6}, function (validation) {
+                    schema.validate({ age: 6 }, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.eql(false);
@@ -387,11 +378,11 @@ describe("plugins/validation", function () {
 
                 it("should fail if the async validator fails & sync passes", function (done) {
                     var asyncSpy = chai.spy(function (age, callback) {
-                            setTimeout(function () {
-                                callback("fail-async");
-                            }, 0);
-                        }),
-                        syncSpy = chai.spy(validateAgeSync);
+                        setTimeout(function () {
+                            callback("fail-async");
+                        }, 0);
+                    });
+                    var syncSpy = chai.spy(validateAgeSync);
 
                     schema = new Schema({
                         age: {
@@ -400,7 +391,7 @@ describe("plugins/validation", function () {
                         }
                     });
 
-                    schema.validate({age: 6}, function (validation) {
+                    schema.validate({ age: 6 }, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.eql(false);
@@ -411,11 +402,11 @@ describe("plugins/validation", function () {
 
                 it("should fail if the sync validator fails & async passes", function (done) {
                     var asyncSpy = chai.spy(function (age, callback) {
-                            callback(true);
-                        }),
-                        syncSpy = chai.spy(function (age) {
-                            return "fail-sync";
-                        });
+                        callback(true);
+                    });
+                    var syncSpy = chai.spy(function (age) {
+                        return "fail-sync";
+                    });
 
                     schema = new Schema({
                         age: {
@@ -424,7 +415,7 @@ describe("plugins/validation", function () {
                         }
                     });
 
-                    schema.validate({age: 8}, function (validation) {
+                    schema.validate({ age: 8 }, function (validation) {
                         expect(asyncSpy).to.have.been.called.once();
                         expect(syncSpy).to.have.been.called.once();
                         expect(validation.result).to.equal(false);

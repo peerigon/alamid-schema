@@ -51,7 +51,6 @@ describe("Schema", function () {
                 });
             });
 
-
             it("should extract the types from the definition if using values", function () {
 
                 schema = new Schema({
@@ -88,7 +87,7 @@ describe("Schema", function () {
                     }
                 });
             });
-            
+
             it("should apply 'Anonymous' as schema name", function () {
                 expect(schema.name).to.equal("Anonymous");
             });
@@ -122,8 +121,8 @@ describe("Schema", function () {
             });
 
             it("should inherit all properties prototypically except 'keys'", function () {
-                var ownProperties = [],
-                    key;
+                var ownProperties = [];
+                var key;
 
                 subset = schema.only("name", "age");
                 for (key in subset) {
@@ -174,8 +173,8 @@ describe("Schema", function () {
             });
 
             it("should inherit all properties prototypically except 'keys'", function () {
-                var ownProperties = [],
-                    key;
+                var ownProperties = [];
+                var key;
 
                 subset = schema.except("name", "age");
                 for (key in subset) {
@@ -311,7 +310,6 @@ describe("Schema", function () {
             });
 
         });
-
 
         describe(".readable()", function () {
 

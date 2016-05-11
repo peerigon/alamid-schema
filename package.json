@@ -4,14 +4,16 @@
   "description": "Extendable mongoose-like schemas for node.js and the browser",
   "main": "lib/Schema.js",
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha -R spec"
+    "test": "mocha -R spec",
+    "posttest": "npm run lint",
+    "lint": "eslint --fix examples lib plugins test"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/peerigon/alamid-schema.git"
   },
-  "engines" : {
-    "node" : ">=0.11"
+  "engines": {
+    "node": ">=0.11"
   },
   "keywords": [
     "schema",
@@ -30,13 +32,14 @@
   },
   "homepage": "https://github.com/peerigon/alamid-schema",
   "dependencies": {
-    "value": "^0.3.0",
-    "alamid-plugin": "^0.1.0"
+    "value": "^0.3.0"
   },
   "devDependencies": {
     "chai": "^3.0.0",
     "chai-as-promised": "^5.1.0",
     "chai-spies": "^0.7.0",
+    "eslint": "^2.9.0",
+    "eslint-config-peerigon": "^4.0.0",
     "mocha": "^2.2.5"
   }
 }

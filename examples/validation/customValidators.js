@@ -1,32 +1,33 @@
 "use strict";
 
 var fs = require("fs");
-
+var path = require("path");
 var Schema = require("../../lib/Schema.js");
+
+var PandaSchema;
+var panda;
+
 Schema.use(require("../../plugins/validation/index.js"));
 
-//CUSTOM VALIDATORS
+// CUSTOM VALIDATORS
 
-//sync
+// sync
 function oldEnough(age) {
     return age > 18 || "too-young";
 }
 
-//async
+// async
 function nameIsUnique(name, callback) {
-
-    fs.readFile(__dirname + "/names.json", function(err, names) {
-        if(err) {
+    fs.readFile(path.join(__dirname, "names.json"), function (err, names) {
+        if (err) {
             throw err;
         }
-
         names = JSON.parse(names);
-
         callback(names.indexOf(name) === -1 || "name-already-taken");
     });
 }
 
-var PandaSchema = new Schema({
+PandaSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -39,15 +40,14 @@ var PandaSchema = new Schema({
     }
 });
 
-var panda = {
+panda = {
     name: "hugo",
     age: 3,
     mood: "happy"
 };
 
-PandaSchema.validate(panda, function(validation) {
-
-    if(!validation.result) {
+PandaSchema.validate(panda, function (validation) {
+    if (!validation.result) {
         console.log(validation.failedFields);
         console.log("failed fields:", Object.keys(validation.failedFields).join(","));
         return;
