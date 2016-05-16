@@ -206,6 +206,7 @@ _Included validators:_
 - minLength (works on String, Array)
 - maxLength (works on String, Array)
 - hasLength (works on String, Array)
+- matches (performs a strict comparison, also accepts RegExp)
 
 _Writing custom validators:_
 

@@ -83,6 +83,24 @@ function hasLengthValidator(hasLength) {
     };
 }
 
+/**
+ * Returns true if the given value matches the pattern. The pattern
+ * may be a value or a regular expression. If it's a value, a strict comparison
+ * will be performed. In case it's a regex, the test method will be invoked.
+ *
+ * @param {*|RegExp} match
+ * @returns {boolean}
+ */
+function matchesValidator(match) {
+    return function matchValue(value) {
+        if (typeof match.test === "function") {
+            match.lastIndex = 0; // reset the lastIndex just in case the regexp is accidentally global
+            return match.test(value);
+        }
+        return match === value;
+    };
+}
+
 exports.required = requiredValidator;
 exports.min = minValidator;
 exports.max = maxValidator;
@@ -90,3 +108,4 @@ exports.enum = enumValidator;
 exports.minLength = minLengthValidator;
 exports.maxLength = maxLengthValidators;
 exports.hasLength = hasLengthValidator;
+exports.matches = matchesValidator;

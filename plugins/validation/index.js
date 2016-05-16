@@ -109,6 +109,11 @@ function validationPlugin(Schema) {
                     this.validators[key].push(defaultValidators.hasLength(fieldDefinition.hasLength));
                 }
 
+                // The matches validators works on all types, so we just check if the key is present
+                if ("matches" in fieldDefinition) {
+                    this.validators[key].push(defaultValidators.matches(fieldDefinition.matches));
+                }
+
                 // custom validators
                 if (value(fieldDefinition.validate).typeOf(Function)) {
                     this.validators[key].push(fieldDefinition.validate);

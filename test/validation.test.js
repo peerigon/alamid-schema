@@ -121,6 +121,19 @@ describe("plugins/validation", function () {
                     expect(schema.validators.name[0].name).to.eql(validators.hasLength().name);
                 });
 
+                it("should add a matches validator", function () {
+                    var schema = new Schema({
+                        age: {
+                            type: Number,
+                            matches: 2
+                        }
+                    });
+
+                    expect(schema.validators.age).to.be.an("array");
+                    expect(schema.validators.age).to.have.length(1);
+                    expect(schema.validators.age[0].name).to.eql(validators.matches().name);
+                });
+
             });
 
             describe("custom validators", function () {
