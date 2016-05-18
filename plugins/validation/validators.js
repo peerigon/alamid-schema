@@ -89,15 +89,20 @@ function hasLengthValidator(hasLength) {
  * will be performed. In case it's a regex, the test method will be invoked.
  *
  * @param {*|RegExp} match
- * @returns {boolean}
+ * @returns {Function}
  */
 function matchesValidator(match) {
     return function matchValue(value) {
+        var result;
+
         if (typeof match.test === "function") {
             match.lastIndex = 0; // reset the lastIndex just in case the regexp is accidentally global
-            return match.test(value);
+            result = match.test(value);
+        } else {
+            result = match === value;
         }
-        return match === value;
+
+        return result || "matches";
     };
 }
 
