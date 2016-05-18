@@ -322,6 +322,41 @@ describe("Schema", function () {
 
         });
 
+        describe(".strip(model)", function () {
+
+            it("should remove all additional keys", function () {
+                var model = {
+                    name: "Octocat",
+                    someOtherProperty: true,
+                    andAnArray: [1, 2, 3]
+                };
+
+                schema.strip(model);
+                expect(model).to.eql({ name: "Octocat" });
+            });
+
+            it("will not work with prototype inheritance", function () {
+                var model = Object.create({
+                    someOtherProperty: true,
+                    andAnArray: [1, 2, 3]
+                });
+
+                model.name = "Octocat";
+                schema.strip(model);
+                expect(model).to.eql(model);
+            });
+
+            it("should work on empty objects", function () {
+                var model = {};
+
+                expect(function () {
+                    schema.strip(model);
+                }).to.not.throw();
+                expect(model).to.eql({});
+            });
+
+        });
+
     });
 
 });

@@ -302,7 +302,7 @@ __Important notice:__ You must bring your own ES6 Promise compatible polyfill!
 
 ### Core
 
-#### Schema(name?: String, definition: Object)
+#### Schema([name: String, ]definition: Object)
 
 Creates a new schema.
 
@@ -310,14 +310,18 @@ Creates a new schema.
 
 The array of property names that are defined on the schema. Do not modify this array.
 
-#### .only(key1: Array|String[, key2: String, key3: String, ...])
+#### .only(key1: Array|String[, key2: String, key3: String, ...]): Schema
 
 Returns a subset with the given keys of the current schema. You may pass an array with keys or just the keys as arguments.
 
-#### .extend([name: String, ]definition: Object)
+#### .extend([name: String, ]definition: Object): Schema
 
 Creates a new schema that inherits from the current schema. Field definitions are merged where appropriate.
 If a definition conflicts with the parent definition, the child's definition supersedes.
+
+#### .strip(model: Object)
+
+Removes all properties from `model` that are not defined in `fields`. Will not remove properties that are inherited from the prototype.
 
 ### Readable & Writable fields
 
