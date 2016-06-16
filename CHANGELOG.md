@@ -1,6 +1,9 @@
 Changelog
 ---------
 
+### 1.1.0
+- Add possibility to create empty subsets via `.only()` and `.except()` [(commit)]((https://github.com/peerigon/alamid-schema/commit/f6a4a0284e83f6adb40d07dde7434aef5b274f30))
+
 ### 1.0.0
 - **Breaking:** Remove `Promise` shim. You need to provide that now [(commit)]((https://github.com/peerigon/alamid-schema/commit/cb3809c367fd64b47166190422e96b0d14e77000)).
 - **Breaking:** Renamed readable- and writable-methods [(commit)](https://github.com/peerigon/alamid-schema/commit/80f9a12b9e239e12c857c5b62116a771ecb7b3b3).
