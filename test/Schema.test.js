@@ -140,10 +140,9 @@ describe("Schema", function () {
                 expect(subset.fields).to.eql(["name", "age"]);
             });
 
-            it("should throw an error if no keys are given", function () {
-                expect(function () {
-                    schema.only();
-                }).to.throw("Cannot create a subset of the schema with no keys");
+            it("should be possible to create schemas with no fields", function () {
+                subset = schema.only();
+                expect(subset.fields).to.eql([]);
             });
 
         });
@@ -156,10 +155,9 @@ describe("Schema", function () {
                 expect(subset.fields).to.eql(["name", "age"]);
             });
 
-            it("should throw an error if no keys are given", function () {
-                expect(function () {
-                    schema.only([]);
-                }).to.throw("Cannot create a subset of the schema with no keys");
+            it("should be possible to create schemas with no fields", function () {
+                subset = schema.only([]);
+                expect(subset.fields).to.eql([]);
             });
 
         });
@@ -192,10 +190,9 @@ describe("Schema", function () {
                 expect(subset.fields).to.eql(["name"]);
             });
 
-            it("should throw an error if no keys are given", function () {
-                expect(function () {
-                    schema.except.apply(schema, schema.fields);
-                }).to.throw("Cannot create a subset of the schema with no keys");
+            it("should be possible to exclude all fields", function () {
+                subset = schema.except.apply(schema, schema.fields);
+                expect(subset.fields).to.eql([]);
             });
 
         });
@@ -208,10 +205,9 @@ describe("Schema", function () {
                 expect(subset.fields).to.eql(["name", "age"]);
             });
 
-            it("should throw an error if no keys are given", function () {
-                expect(function () {
-                    schema.except(schema.fields);
-                }).to.throw("Cannot create a subset of the schema with no keys");
+            it("should be possible to exclude all fields", function () {
+                subset = schema.except(schema.fields);
+                expect(subset.fields).to.eql([]);
             });
 
         });
