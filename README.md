@@ -379,3 +379,7 @@ var PandaReadableSchema = PandaSchema.readable();
 #### .validate(model: Object[, callback: Function]): Promise
 
 Validate given model using the schema definitions. Callback will be called/Promise will be fulfilled with a validation object with `result` (Boolean) and `errors` (Object) containing the error codes.
+
+## Sponsors
+
+[<img src="https://assets.peerigon.com/peerigon/logo/peerigon-logo-flat-spinat.png" width="150" />](https://peerigon.com)
